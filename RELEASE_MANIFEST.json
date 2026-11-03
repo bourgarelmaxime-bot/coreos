@@ -1,0 +1,12 @@
+{
+  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "release_status":"NOT_RELEASED",
+  "base_version":"1.1.0-rc.5",
+  "target_version":"1.2.0",
+  "candidate_branch":"feat/1.2-capability-graph-planner",
+  "artifact_identity":"PENDING_RELEASE_PREPARATION",
+  "runtime_sha256":"PENDING_CI_EVIDENCE",
+  "planner_sha256":"PENDING_CI_EVIDENCE",
+  "release_authorized":false,
+  "reason":"Version/build identity and exact release artifact are frozen only after change qualification and merge eligibility."
+}
