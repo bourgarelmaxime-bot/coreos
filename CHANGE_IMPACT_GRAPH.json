@@ -1,0 +1,35 @@
+{
+  "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "base_sha": "378003ad23d7902f988edc52dee327917121c5c6",
+  "method": "ANI/Pareto dependency and blast-radius analysis",
+  "nodes": [
+    {"id":"public_request_contract","centrality":"high","change":"additive"},
+    {"id":"capability_normalization","centrality":"critical","change":"new"},
+    {"id":"capability_graph","centrality":"critical","change":"new"},
+    {"id":"planner","centrality":"critical","change":"replace positional selection"},
+    {"id":"provider_registry","centrality":"high","change":"consume descriptors for eligibility"},
+    {"id":"authority","centrality":"critical","change":"preserve/enforce"},
+    {"id":"budget","centrality":"critical","change":"preserve/enforce per graph"},
+    {"id":"execution_runtime","centrality":"high","change":"consume richer deterministic plan"},
+    {"id":"evidence","centrality":"high","change":"record graph planning facts"},
+    {"id":"persistence","centrality":"medium","change":"no schema change"},
+    {"id":"sdk","centrality":"medium","change":"additive descriptor support"},
+    {"id":"tests","centrality":"critical","change":"graph/compat/security falsification"}
+  ],
+  "critical_paths": [
+    ["public_request_contract","capability_normalization","capability_graph","planner","execution_runtime"],
+    ["provider_registry","planner"],
+    ["authority","planner","execution_runtime"],
+    ["budget","planner","execution_runtime"],
+    ["planner","evidence"]
+  ],
+  "blast_radius": {
+    "high": ["planner","request validation","plan representation","evidence"],
+    "medium": ["SDK","API documentation","provider matching"],
+    "low": ["database schema","kill switch","authentication primitive"]
+  },
+  "single_points_of_failure": ["capability normalization correctness","cycle detection","provider eligibility","budget aggregation"],
+  "rollback_path": "Revert feature branch/PR to base SHA; no database migration.",
+  "pareto_decision": "Implement the deterministic graph foundation before runtime replanning, learning, or multi-objective routing because those capabilities depend on a trustworthy graph representation.",
+  "deferred": ["adaptive replanning","outcome learning","multi-objective provider scoring","dynamic topology reinforcement","external application actuation"]
+}
