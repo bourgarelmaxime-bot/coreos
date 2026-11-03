@@ -1,0 +1,9 @@
+{
+  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "base_sha":"378003ad23d7902f988edc52dee327917121c5c6",
+  "candidate_branch":"feat/1.2-capability-graph-planner",
+  "gates":{"G0":"PASS","E1":"PASS","E2":"PASS","E4":"IMPLEMENTED_PENDING_CI","E6":"PENDING_CI","E8":"PENDING_PR_CI","E9":"PENDING_ISOLATED_QUALIFICATION","E10":"DEFINED_PENDING_RESULTS","E11":"DOCUMENTED_PENDING_NEGATIVE_TESTS","E12":"IMPLEMENTED_PENDING_RUNTIME_EVIDENCE","E13":"PENDING_ISOLATED_ROLLBACK"},
+  "eligible":false,
+  "verdict":"FAIL — CORE OS MERGE BLOCKED",
+  "reason":"CI, isolated runtime qualification and rollback qualification are not yet demonstrated."
+}
