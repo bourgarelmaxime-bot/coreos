@@ -1,5 +1,5 @@
 import { SQL } from 'bun';
-import { createHash, createHmac } from 'node:crypto';
+import { createHash, createHmac, randomUUID } from 'node:crypto';
 const sql=new SQL(Bun.env.DATABASE_URL||'');
 const PORT=String(Bun.env.PORT||34123),URL='http://127.0.0.1:'+PORT;
 const ARTIFACT='dist/coreos-1.2.0-rc.1.ts',SECRET=Bun.env.COREOS_AUTH_SECRET||'';
@@ -32,8 +32,8 @@ async function start(){
  }throw Error('RUNTIME_NOT_READY');
 }
 async function stop(){if(child){child.kill();await child.exited;child=null;}}
-async function call(name:string,path:string,method='GET',token='',body:any=undefined,status=200,error=''){
- const headers:Record<string,string>={'content-type':'application/json'};if(token)headers.authorization='Bearer '+token;
+async function call(name:string,path:string,method='GET',token='',body:any=undefined,status=200,error='',idem=''){
+ const headers:Record<string,string>={'content-type':'application/json'};if(token)headers.authorization='Bearer '+token;if(idem)headers['idempotency-key']=idem;
  const resp=await fetch(URL+path,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});
  const result:any=await resp.json();
  ok(resp.status===status,name+'_status_'+resp.status+'_expected_'+status+':'+JSON.stringify(result).slice(0,120));
@@ -58,9 +58,26 @@ async function main(){
  await call('no_auth','/v1/requests','POST','',req(['a'],1),401,'MISSING_CREDENTIALS');
  await call('expired','/v1/requests','POST',auth('a',scopes,true),req(['a'],1),401,'EXPIRED_CREDENTIALS');
  await call('scope_denied','/v1/requests','POST',auth('a',['requests:read']),req(['a'],1),403,'INSUFFICIENT_SCOPE');
+ const good=auth('a'),bad=Buffer.from(JSON.stringify({iss:'coreos',app_id:'b',scopes,exp:Math.floor(Date.now()/1000)+900})).toString('base64url')+'.'+good.split('.')[1];
+ await call('forged_identity_rejected','/v1/requests','POST',bad,req(['a'],1),401,'INVALID_CREDENTIALS');
+ await call('control_scope_rejected','/v1/control/kill-switch','POST',auth('a',['requests:write']),{engaged:false},403,'INSUFFICIENT_SCOPE');
+
  const graph=await call('DAG','/v1/requests','POST',auth('a'),
  req([{id:'release',depends_on:['review']},{id:'draft'},{id:'review',depends_on:['draft']}],3),201);
  ok(JSON.stringify(graph.plan.graph.execution_order)==='["draft","review","release"]','DAG_order');
+ const idem='qual-'+randomUUID(),same=req(['stable'],1);
+ const first=await call('idempotency_first','/v1/requests','POST',auth('a'),same,201,'',idem);
+ const again=await call('idempotency_replay','/v1/requests','POST',auth('a'),same,201,'',idem);
+ ok(again.replayed===true&&again.request_id===first.request_id,'idempotent_replay_identity');
+ await call('idempotency_conflict','/v1/requests','POST',auth('a'),req(['changed'],1),409,'IDEMPOTENCY_CONFLICT',idem);
+ const cancel=await call('cancel_request_create','/v1/requests','POST',auth('a'),req(['cancellable'],1),201);
+ await call('cancel_request','/v1/requests/'+cancel.request_id+'/cancel','POST',auth('a'),{},200);
+ await call('tenant_evidence_denied','/v1/executions/'+graph.execution_id+'/evidence','GET',auth('b'),undefined,403,'FORBIDDEN');
+ const large=Array.from({length:256},(_,i)=>({id:'node-'+String(i).padStart(3,'0'),depends_on:i?['node-'+String(i-1).padStart(3,'0')]:[],cost:1}));
+ const t0=performance.now();const largePlan=await call('bounded_256_node_DAG','/v1/requests','POST',auth('a'),req(large,256),201);
+ ok(largePlan.plan.graph.nodes.length===256,'graph_size_256');
+ ok(performance.now()-t0<8000,'bounded_graph_latency_8s');
+
  await call('cycle','/v1/requests','POST',auth('a'),req([{id:'a',depends_on:['b']},{id:'b',depends_on:['a']}],2),400,'CAPABILITY_DEPENDENCY_CYCLE');
  await call('missing_dependency','/v1/requests','POST',auth('a'),req([{id:'a',depends_on:['z']}],1),400,'MISSING_CAPABILITY_DEPENDENCY');
  await call('duplicate','/v1/requests','POST',auth('a'),req(['a','a'],2),400,'DUPLICATE_CAPABILITY');
@@ -89,6 +106,10 @@ async function main(){
  await stop();await start();
  const result=await call('restart_persistence','/v1/executions/'+execution.execution_id+'/result','GET',auth('a'));
  ok(result.status==='SUCCEEDED','persisted_result');
+ const persistedGraph=await call('restart_persisted_graph','/v1/executions/'+graph.execution_id+'/plan','GET',auth('a'));
+ ok(persistedGraph.plan.graph.edges.length===2,'graph_persisted_edges');
+ const replayAfterRestart=await call('idempotency_after_restart','/v1/requests','POST',auth('a'),same,201,'',idem);
+ ok(replayAfterRestart.replayed===true&&replayAfterRestart.request_id===first.request_id,'idempotency_persisted');
  const ctl=await call('restart_kill_switch','/v1/control/state','GET',auth('a'));
  ok(ctl.kill_switch===true,'safe_restart');
  console.log(JSON.stringify({event:'COREOS_ISOLATED_GATE',verdict:'PASS',tests:passed,count:passed.length,
