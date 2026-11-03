@@ -11,7 +11,7 @@ async function submit(body:any,ctx:any){
   const idem=ctx.idempotency_key, payloadHash=sha256(stable(body));
   if(idem){const p=await db`select response from coreos_product.idempotency where app_id=${ctx.app_id} and idempotency_key=${idem}`;if(p[0]){const prior=p[0].response;if(prior.payload_hash!==payloadHash)return{error:'IDEMPOTENCY_CONFLICT',status:409};return{...prior.response,replayed:true};}}
   let plan:any;
-  try{plan=buildCapabilityPlan(body);}catch(e:any){if(e instanceof PlannerError)return{error:e.code,status:e.code==='BUDGET_EXCEEDED'?422:400,details:e.details};throw e;}
+  try{plan=buildCapabilityPlan({...body,authorized_scopes:ctx.scopes});}catch(e:any){if(e instanceof PlannerError)return{error:e.code,status:e.code==='BUDGET_EXCEEDED'?422:400,details:e.details};throw e;}
   const requestId=randomUUID(),executionId=randomUUID(),traceId=ctx.trace_id,created=nowIso();
   const req={request_id:requestId,execution_id:executionId,app_id:ctx.app_id,objective:body.objective,constraints:body.constraints,available_capabilities:body.available_capabilities,authority:body.authority,budget:body.budget,state_reference:body.state_reference,providers:body.providers,status:'PLANNED',created_at:created};
   const exe={execution_id:executionId,request_id:requestId,app_id:ctx.app_id,status:'PLANNED',trace_id:traceId,plan,result:null,created_at:created};
