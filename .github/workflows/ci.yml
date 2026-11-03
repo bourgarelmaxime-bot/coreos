@@ -15,9 +15,52 @@ jobs:
           python-version: '3.12'
       - name: Repository checks
         run: python3 tests/repository_checks.py
+      - name: Capability planner unit tests
+        run: bun test tests/unit/*.test.ts
       - name: Deterministic release build
         run: |
           python3 scripts/build_release.py
-          cp dist/coreos-1.1.0-rc.5.ts /tmp/first.ts
+          cp dist/coreos-1.2.0-rc.1.ts /tmp/first.ts
           python3 scripts/build_release.py
-          cmp /tmp/first.ts dist/coreos-1.1.0-rc.5.ts
+          cmp /tmp/first.ts dist/coreos-1.2.0-rc.1.ts
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Rebuild identical artifact under Python 3.13
+        run: |
+          python3 scripts/build_release.py
+          cmp /tmp/first.ts dist/coreos-1.2.0-rc.1.ts
+  isolated-qualification:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: qual
+          POSTGRES_PASSWORD: qual_local_only
+          POSTGRES_DB: coreos_qual
+        ports: 
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U qual -d coreos_qual"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgresql://qual:qual_local_only@127.0.0.1:5432/coreos_qual
+      COREOS_AUTH_SECRET: coreos_ci_qualification_only_secret_1234567890abcdef
+      COREOS_BOOTSTRAP_SQL: '1'
+      PORT: '34123'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build candidate artifact
+        run: python3 scripts/build_release.py
+      - name: Isolated HTTP security and restart
+        run: bun run qualification/isolated-gate.ts

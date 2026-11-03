@@ -1,6 +1,6 @@
 {
   "name": "coreos-adaptive-runtime",
-  "version": "1.1.0-rc.5",
+  "version": "1.2.0-rc.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -9,8 +9,9 @@
   "scripts": {
     "build": "python3 scripts/build_release.py",
     "test:repo": "python3 tests/repository_checks.py",
-    "test": "python3 tests/repository_checks.py",
-    "qualification": "echo \"Use qualification/*.ts against an isolated RC environment\""
+    "test:unit": "bun test tests/unit/*.test.ts",
+    "test": "python3 tests/repository_checks.py && bun test tests/unit/*.test.ts",
+    "qualification": "bun run qualification/isolated-gate.ts"
   },
   "dependencies": {},
   "devDependencies": {}

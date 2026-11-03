@@ -1,8 +1,9 @@
 import { SQL } from 'bun';
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { buildCapabilityPlan, PlannerError } from './capability-planner.ts';
 
-const VERSION = '1.1.0-rc.5';
-const BUILD = 'SELFCONTAINED_RC5';
+const VERSION = '1.2.0-rc.1';
+const BUILD = 'COREOS_1_2_RC1';
 const CONTRACT_VERSION = 'COREOS_INTEGRATION_CONTRACT_V1';
 const POLICY_VERSION = 'COREOS_CAPACITY_POLICY_V1';
 const PROVIDER_INTERFACES = Object.freeze([
@@ -93,5 +94,3 @@ async function appendAudit(event:any){
   await db`insert into coreos_product.audit_events(event_id,app_id,event_type,event,previous_hash,event_hash,ts) values(${event.event_id},${event.app_id},${event.type||'EVENT'},${event},${previous},${eventHash},${event.ts}) on conflict(event_id) do nothing`;
 }
 function evidenceEvent({appId,requestId,executionId,traceId,type,observed=null,decision=null,reason=null,action=null,effect=null,cost=null}:any){return{event_id:randomUUID(),ts:nowIso(),app_id:appId,request_id:requestId,execution_id:executionId,trace_id:traceId,type,policy_version:POLICY_VERSION,observed,decision,reason,action,effect,cost};}
-function makePlan(body:any){
-  const selected=body.available_capabilities.slice(0,Math.max(1,Math.min(4,body.available_capabilities.length)));
