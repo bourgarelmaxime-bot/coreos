@@ -45,7 +45,7 @@ function req(caps:any[],budget:number,mode='recommendation',providers:any[]=[]){
 }
 async function main(){
  ok(SECRET.length>=32,'secret');ok(!!Bun.env.DATABASE_URL,'database');
- const sha=createHash('sha256').update(await Bun.file(ARTIFACT).arrayBuffer()).digest('hex');
+ const sha=createHash('sha256').update(new Uint8Array(await Bun.file(ARTIFACT).arrayBuffer())).digest('hex');
  if(Bun.env.COREOS_BOOTSTRAP_SQL==='1')await bootstrap();
  const m=await sql.unsafe('select count(*)::integer n from coreos_product.schema_migrations');
  ok(m[0].n===4,'migrations_001_004');
