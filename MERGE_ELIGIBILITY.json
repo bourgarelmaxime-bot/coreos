@@ -1,9 +1,23 @@
 {
-  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
-  "base_sha":"378003ad23d7902f988edc52dee327917121c5c6",
-  "candidate_branch":"feat/1.2-capability-graph-planner",
-  "gates":{"G0":"PASS","E1":"PASS","E2":"PASS","E4":"IMPLEMENTED_PENDING_CI","E6":"PENDING_CI","E8":"PENDING_PR_CI","E9":"PENDING_ISOLATED_QUALIFICATION","E10":"DEFINED_PENDING_RESULTS","E11":"DOCUMENTED_PENDING_NEGATIVE_TESTS","E12":"IMPLEMENTED_PENDING_RUNTIME_EVIDENCE","E13":"PENDING_ISOLATED_ROLLBACK"},
-  "eligible":false,
-  "verdict":"FAIL — CORE OS MERGE BLOCKED",
-  "reason":"CI, isolated runtime qualification and rollback qualification are not yet demonstrated."
+  "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "base_sha": "378003ad23d7902f988edc52dee327917121c5c6",
+  "candidate_branch": "feat/1.2-capability-graph-planner",
+  "gates": {
+    "G0": "PASS",
+    "E1": "PASS",
+    "E2": "PASS",
+    "E4": "IMPLEMENTED_PENDING_CI",
+    "E6": "PENDING_CI",
+    "E8": "PR_CI_PASS_PREVIOUS_SHA_CURRENT_SHA_PENDING",
+    "E9": "PENDING_ISOLATED_QUALIFICATION",
+    "E10": "DEFINED_PENDING_RESULTS",
+    "E11": "PROVIDER_SCOPE_SECURITY_FIX_COMMITTED_PENDING_CI_AND_NEGATIVE_RUNTIME_TESTS",
+    "E12": "IMPLEMENTED_PENDING_RUNTIME_EVIDENCE",
+    "E13": "PENDING_ISOLATED_ROLLBACK"
+  },
+  "eligible": false,
+  "verdict": "FAIL — CORE OS MERGE BLOCKED",
+  "reason": "PR CI passed previous SHA; current corrected SHA not yet qualified. Isolated runtime, security and rollback still pending.",
+  "candidate_sha": "bfa769850c648121541e82665ef1644a6281ebf1",
+  "pr": 1
 }
