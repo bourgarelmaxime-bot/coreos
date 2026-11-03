@@ -9,7 +9,8 @@
   "scripts": {
     "build": "python3 scripts/build_release.py",
     "test:repo": "python3 tests/repository_checks.py",
-    "test": "python3 tests/repository_checks.py",
+    "test:unit": "bun test tests/unit/*.test.ts",
+    "test": "python3 tests/repository_checks.py && bun test tests/unit/*.test.ts",
     "qualification": "echo \"Use qualification/*.ts against an isolated RC environment\""
   },
   "dependencies": {},
