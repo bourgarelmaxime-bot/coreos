@@ -1,12 +1,18 @@
 {
-  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
-  "release_status":"NOT_RELEASED",
-  "base_version":"1.1.0-rc.5",
-  "target_version":"1.2.0",
-  "candidate_branch":"feat/1.2-capability-graph-planner",
-  "artifact_identity":"PENDING_RELEASE_PREPARATION",
-  "runtime_sha256":"PENDING_CI_EVIDENCE",
-  "planner_sha256":"PENDING_CI_EVIDENCE",
-  "release_authorized":false,
-  "reason":"Version/build identity and exact release artifact are frozen only after change qualification and merge eligibility."
+  "schema": "COREOS_RELEASE_MANIFEST_V1",
+  "change": "CORE OS 1.2 Capability Graph Planner",
+  "release_status": "NOT_RELEASED",
+  "base_version": "1.1.0-rc.5",
+  "candidate_version": "1.2.0-rc.1",
+  "build": "COREOS_1_2_RC1",
+  "qualified_source_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
+  "artifact_sha256": "f9827117473e44a77967d16314d3d3b248a33e7cdf6ee1f5fbc1fd3a0db10af4",
+  "runtime_sha256": "7b1eab455b318fdbcd27fdbfcc2902e6c3afdd4dd6a094f2d13610f5b191fe19",
+  "planner_sha256": "d16a946b9ae018bebef8c4358d1ce994a376772344ce90312dcf38f4917ac5cc",
+  "packaging": "canonical uncompressed base64 with SHA-256 check",
+  "cross_python": "3.12 and 3.13 byte-identical",
+  "ci_pr_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41702781545",
+  "railway_qualification_deployment": "60352a45-289b-4cc1-9145-ca0fa5474bb3",
+  "release_authorized": false,
+  "merge_authorized": false
 }

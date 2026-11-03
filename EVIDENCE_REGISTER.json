@@ -1,18 +1,26 @@
 {
-  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
-  "base_sha":"378003ad23d7902f988edc52dee327917121c5c6",
-  "evidence":[
-    {"artifact":"CHANGE_SPEC.md","status":"COMPLETE"},
-    {"artifact":"CHANGE_IMPACT_GRAPH.json","status":"COMPLETE"},
-    {"artifact":"TEST_MATRIX.json","status":"COMPLETE"},
-    {"artifact":"REGRESSION_MATRIX.json","status":"DEFINED_PENDING_RESULTS"},
-    {"artifact":"SECURITY_DELTA.md","status":"COMPLETE"},
-    {"artifact":"MIGRATION_REPORT.md","status":"NO_MIGRATION"},
-    {"artifact":"OBSERVABILITY_RECEIPT.json","status":"PENDING_RUNTIME_QUALIFICATION"},
-    {"artifact":"ROLLBACK_RECEIPT.json","status":"PENDING_RUNTIME_QUALIFICATION"},
-    {"artifact":"MERGE_ELIGIBILITY.json","status":"BLOCKED_PENDING_GATES"},
-    {"artifact":"QUALIFICATION_REPORT.md","status":"PENDING_CI_AND_RUNTIME"}
+  "change": "CORE OS 1.2",
+  "code_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
+  "artifact_sha256": "f9827117473e44a77967d16314d3d3b248a33e7cdf6ee1f5fbc1fd3a0db10af4",
+  "ci_pr_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41702781545",
+  "qualification_date": "2026-11-03",
+  "artifacts": {
+    "CHANGE_SPEC.md": "COMPLETE",
+    "CHANGE_IMPACT_GRAPH.json": "COMPLETE",
+    "TEST_MATRIX.json": "36_HOSTED_HTTP_AND_12_UNIT_PASS_WITH_CG020_LIMIT",
+    "REGRESSION_MATRIX.json": "SCOPED_PASS",
+    "SECURITY_DELTA.md": "SCOPED_PASS",
+    "MIGRATION_REPORT.md": "NO_NEW_MIGRATION_BOOTSTRAP_VERIFIED",
+    "OBSERVABILITY_RECEIPT.json": "PASS",
+    "ROLLBACK_RECEIPT.json": "PASS_RC1_RC5_RC1",
+    "MERGE_ELIGIBILITY.json": "BLOCKED_E14",
+    "QUALIFICATION_REPORT.md": "SCOPED_PASS"
+  },
+  "verdict": "CONDITIONAL PASS — CORE OS CHANGE QUALIFIED / RELEASE BLOCKED",
+  "limitations": [
+    "Load and soak pending",
+    "Independent review pending",
+    "Source-only qualification, no external application pilot"
   ],
-  "release_manifest":"DEFERRED_UNTIL_RELEASE_PREPARATION",
-  "verdict":"FAIL — CORE OS CHANGE NOT QUALIFIED"
+  "release_authorized": false
 }

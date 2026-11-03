@@ -1,26 +1,148 @@
 {
   "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
-  "status": "PLANNED",
+  "status": "QUALIFIED_SCOPED_WITH_PERFORMANCE_LIMITATION",
   "tests": [
-    {"id":"CG-001","class":"unit","case":"legacy string normalization","expected":"independent deterministic nodes"},
-    {"id":"CG-002","class":"unit","case":"structured descriptor normalization","expected":"canonical graph nodes"},
-    {"id":"CG-003","class":"unit","case":"duplicate capability id","expected":"fail closed"},
-    {"id":"CG-004","class":"unit","case":"missing dependency","expected":"fail closed"},
-    {"id":"CG-005","class":"unit","case":"dependency cycle","expected":"fail closed"},
-    {"id":"CG-006","class":"unit","case":"DAG topological ordering","expected":"stable deterministic order"},
-    {"id":"CG-007","class":"unit","case":"identical input repeated","expected":"byte-equivalent plan payload excluding request ids"},
-    {"id":"CG-008","class":"contract","case":"legacy V1 request","expected":"accepted without breaking existing fields"},
-    {"id":"CG-009","class":"contract","case":"structured capabilities additive contract","expected":"accepted"},
-    {"id":"CG-010","class":"security","case":"budget aggregation exceeds max","expected":"BUDGET_EXCEEDED"},
-    {"id":"CG-011","class":"security","case":"provider requirement unavailable","expected":"fail closed"},
-    {"id":"CG-012","class":"security","case":"mutation authority absent","expected":"no authority expansion"},
-    {"id":"CG-013","class":"integration","case":"graph plan persisted and retrieved","expected":"same graph"},
-    {"id":"CG-014","class":"integration","case":"PLAN_CREATED evidence","expected":"node edge unresolved cost facts present"},
-    {"id":"CG-015","class":"regression","case":"kill switch","expected":"unchanged fail-closed execution"},
-    {"id":"CG-016","class":"regression","case":"idempotency","expected":"unchanged replay/conflict behavior"},
-    {"id":"CG-017","class":"regression","case":"tenant isolation","expected":"cross-app access denied"},
-    {"id":"CG-018","class":"release","case":"deterministic build twice","expected":"identical artifact"},
-    {"id":"CG-019","class":"architecture","case":"forbidden application semantics scan","expected":"zero DESIGN OS/GMIS/CHCG/domain coupling"},
-    {"id":"CG-020","class":"performance","case":"bounded graph near request-size limit","expected":"bounded memory/time, no network calls"}
-  ]
+    {
+      "id": "CG-001",
+      "class": "unit",
+      "case": "legacy string normalization",
+      "expected": "independent deterministic nodes",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-002",
+      "class": "unit",
+      "case": "structured descriptor normalization",
+      "expected": "canonical graph nodes",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-003",
+      "class": "unit",
+      "case": "duplicate capability id",
+      "expected": "fail closed",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-004",
+      "class": "unit",
+      "case": "missing dependency",
+      "expected": "fail closed",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-005",
+      "class": "unit",
+      "case": "dependency cycle",
+      "expected": "fail closed",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-006",
+      "class": "unit",
+      "case": "DAG topological ordering",
+      "expected": "stable deterministic order",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-007",
+      "class": "unit",
+      "case": "identical input repeated",
+      "expected": "byte-equivalent plan payload excluding request ids",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-008",
+      "class": "contract",
+      "case": "legacy V1 request",
+      "expected": "accepted without breaking existing fields",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-009",
+      "class": "contract",
+      "case": "structured capabilities additive contract",
+      "expected": "accepted",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-010",
+      "class": "security",
+      "case": "budget aggregation exceeds max",
+      "expected": "BUDGET_EXCEEDED",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-011",
+      "class": "security",
+      "case": "provider requirement unavailable",
+      "expected": "fail closed",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-012",
+      "class": "security",
+      "case": "mutation authority absent",
+      "expected": "no authority expansion",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-013",
+      "class": "integration",
+      "case": "graph plan persisted and retrieved",
+      "expected": "same graph",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-014",
+      "class": "integration",
+      "case": "PLAN_CREATED evidence",
+      "expected": "node edge unresolved cost facts present",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-015",
+      "class": "regression",
+      "case": "kill switch",
+      "expected": "unchanged fail-closed execution",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-016",
+      "class": "regression",
+      "case": "idempotency",
+      "expected": "unchanged replay/conflict behavior",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-017",
+      "class": "regression",
+      "case": "tenant isolation",
+      "expected": "cross-app access denied",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-018",
+      "class": "release",
+      "case": "deterministic build twice",
+      "expected": "identical artifact",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-019",
+      "class": "architecture",
+      "case": "forbidden application semantics scan",
+      "expected": "zero DESIGN OS/GMIS/CHCG/domain coupling",
+      "status": "PASS"
+    },
+    {
+      "id": "CG-020",
+      "class": "performance",
+      "case": "bounded graph near request-size limit",
+      "expected": "bounded memory/time, no network calls",
+      "status": "PARTIAL_256_NODE_TEST_NOT_AT_PAYLOAD_LIMIT"
+    }
+  ],
+  "test_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41702781545",
+  "candidate_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948"
 }

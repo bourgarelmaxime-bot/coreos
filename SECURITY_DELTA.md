@@ -21,3 +21,11 @@ Authentication, token verification, scopes, application isolation, idempotency, 
 ## Residual risks
 
 Provider descriptors are caller-supplied planning evidence; this change does not establish provider attestation or live health verification. Runtime provider health selection and dynamic replanning remain explicitly out of scope and must not be inferred from this foundation.
+
+## Qualification empirique — 2026-11-03
+
+Tests HTTP sur Postgres jetable (GitHub Actions, Railway) : 36/36 PASS sur le meme fichier artefact SHA-256 f9827117473e44a77967d16314d3d3b248a33e7cdf6ee1f5fbc1fd3a0db10af4. Refus verifies : authentification manquante, jeton expire, usurpation de claims, scopes insuffisants, fuite inter-app sur requetes et preuves, permission provider absente, autorite mutation absente, cout depasse, DAG invalide, kill switch ON, tentative UPDATE audit refusee par trigger.
+
+Regressions confirmees : idempotency replay/conflict, idempotence apres restart, cancel, execution noop sans mutation externe, persistence des graphes et receipts, retour au kill switch ON.
+
+Limites : tests non exhaustifs face aux charges soutenues, courses de concurrence, multi-replicas, mutation par adapters reels et providers non attestes. Aucun deploiement applicatif externe n'a eu lieu.

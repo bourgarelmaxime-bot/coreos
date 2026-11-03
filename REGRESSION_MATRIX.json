@@ -1,16 +1,77 @@
 {
-  "change":"CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
-  "base_sha":"378003ad23d7902f988edc52dee327917121c5c6",
-  "dimensions":[
-    {"dimension":"correctness","tests":["legacy deterministic planning","DAG topological order","duplicate rejection","missing dependency rejection","cycle rejection"]},
-    {"dimension":"fail_safe","tests":["unresolved provider rejection","budget rejection","external mutation provider denied without authority"]},
-    {"dimension":"generic_abstraction","tests":["application-opaque identifiers","no forbidden domain coupling"]},
-    {"dimension":"application_opacity","tests":["repository forbidden-coupling scan"]},
-    {"dimension":"rollback","status":"NO_MIGRATION_BASE_SHA_ROLLBACK"},
-    {"dimension":"recovery","status":"UNCHANGED_RUNTIME_PERSISTENCE_PATH"},
-    {"dimension":"security","tests":["authority cannot be broadened by provider matching","existing auth/scope path unchanged"]},
-    {"dimension":"observability","tests":["PLAN_CREATED includes graph counts, unresolved count, planner version and estimated cost"]},
-    {"dimension":"cost","tests":["normalized declared cost summed before plan acceptance","budget fail-closed"]}
+  "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "base_sha": "378003ad23d7902f988edc52dee327917121c5c6",
+  "dimensions": [
+    {
+      "dimension": "correctness",
+      "tests": [
+        "legacy deterministic planning",
+        "DAG topological order",
+        "duplicate rejection",
+        "missing dependency rejection",
+        "cycle rejection"
+      ]
+    },
+    {
+      "dimension": "fail_safe",
+      "tests": [
+        "unresolved provider rejection",
+        "budget rejection",
+        "external mutation provider denied without authority"
+      ]
+    },
+    {
+      "dimension": "generic_abstraction",
+      "tests": [
+        "application-opaque identifiers",
+        "no forbidden domain coupling"
+      ]
+    },
+    {
+      "dimension": "application_opacity",
+      "tests": [
+        "repository forbidden-coupling scan"
+      ]
+    },
+    {
+      "dimension": "rollback",
+      "status": "NO_MIGRATION_BASE_SHA_ROLLBACK"
+    },
+    {
+      "dimension": "recovery",
+      "status": "UNCHANGED_RUNTIME_PERSISTENCE_PATH"
+    },
+    {
+      "dimension": "security",
+      "tests": [
+        "authority cannot be broadened by provider matching",
+        "existing auth/scope path unchanged"
+      ]
+    },
+    {
+      "dimension": "observability",
+      "tests": [
+        "PLAN_CREATED includes graph counts, unresolved count, planner version and estimated cost"
+      ]
+    },
+    {
+      "dimension": "cost",
+      "tests": [
+        "normalized declared cost summed before plan acceptance",
+        "budget fail-closed"
+      ]
+    }
   ],
-  "qualification_status":"PENDING_CI_AND_INTEGRATION_QUALIFICATION"
+  "qualification_status": "PASS_FUNCTIONAL_SECURITY_RECOVERY_ROLLBACK_WITH_LIMITED_PERFORMANCE_COVERAGE",
+  "test_suites": {
+    "unit_tests": 12,
+    "http_gate_ci": 36,
+    "http_gate_railway": 36,
+    "pr_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41702781545",
+    "railway_deployment": "60352a45-289b-4cc1-9145-ca0fa5474bb3"
+  },
+  "residuals": [
+    "CG-020 near-1MiB request memory/latency test not executed; 256-node DAG passed",
+    "No extended high-concurrency soak, multi-replica trial or independent review"
+  ]
 }

@@ -1,8 +1,37 @@
 {
-  "change":"CORE OS 1.2 Capability Graph Planner",
-  "status":"IMPLEMENTED_PENDING_RUNTIME_QUALIFICATION",
-  "plan_event":"PLAN_CREATED",
-  "fields":["app_id","request_id","execution_id","trace_id","policy_version","planner_version","graph_nodes","graph_edges","unresolved","selected","estimated_cost"],
-  "sensitive_data_policy":"No credentials or provider secrets are added to planner evidence.",
-  "build_identity":"Existing VERSION/BUILD identity remains until release preparation gate."
+  "schema": "COREOS_OBSERVABILITY_RECEIPT_V1",
+  "date": "2026-11-03",
+  "status": "PASS_SCOPED_HTTP_EVIDENCE",
+  "source_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
+  "artifact_sha256": "f9827117473e44a77967d16314d3d3b248a33e7cdf6ee1f5fbc1fd3a0db10af4",
+  "runtime_sha256": "7b1eab455b318fdbcd27fdbfcc2902e6c3afdd4dd6a094f2d13610f5b191fe19",
+  "planner_sha256": "d16a946b9ae018bebef8c4358d1ce994a376772344ce90312dcf38f4917ac5cc",
+  "plan_event": "PLAN_CREATED",
+  "verified_fields": [
+    "app_id",
+    "request_id",
+    "execution_id",
+    "trace_id",
+    "policy_version",
+    "planner_version",
+    "graph_nodes",
+    "graph_edges",
+    "unresolved",
+    "selected",
+    "estimated_cost"
+  ],
+  "ci": {
+    "url": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41702781545",
+    "tests_passed": 36
+  },
+  "railway": {
+    "project_id": "5fca3e49-f0f3-4991-b284-5d1e3e9744ef",
+    "environment_id": "25be38ce-0917-4dab-9160-c846148bbcc2",
+    "deployment_id": "60352a45-289b-4cc1-9145-ca0fa5474bb3",
+    "tests_passed": 36
+  },
+  "fixture_execution_id": "bc66a79f-5af0-4f3c-a76e-e4ca86a00f9e",
+  "external_mutations": 0,
+  "kill_switch": true,
+  "notes": "Hash-based identity; receipts are NOT cryptographically signed. No credential values are recorded."
 }

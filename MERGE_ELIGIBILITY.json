@@ -1,23 +1,26 @@
 {
-  "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning Foundation",
+  "schema": "COREOS_MERGE_ELIGIBILITY_V1",
+  "change": "CORE OS 1.2 Capability Graph & Constraint-Aware Planning",
   "base_sha": "378003ad23d7902f988edc52dee327917121c5c6",
-  "candidate_branch": "feat/1.2-capability-graph-planner",
+  "qualified_code_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
+  "branch": "feat/1.2-capability-graph-planner",
+  "pr": 1,
+  "artifact_sha256": "f9827117473e44a77967d16314d3d3b248a33e7cdf6ee1f5fbc1fd3a0db10af4",
   "gates": {
     "G0": "PASS",
     "E1": "PASS",
     "E2": "PASS",
-    "E4": "IMPLEMENTED_PENDING_CI",
-    "E6": "PENDING_CI",
-    "E8": "PR_CI_PASS_PREVIOUS_SHA_CURRENT_SHA_PENDING",
-    "E9": "PENDING_ISOLATED_QUALIFICATION",
-    "E10": "DEFINED_PENDING_RESULTS",
-    "E11": "PROVIDER_SCOPE_SECURITY_FIX_COMMITTED_PENDING_CI_AND_NEGATIVE_RUNTIME_TESTS",
-    "E12": "IMPLEMENTED_PENDING_RUNTIME_EVIDENCE",
-    "E13": "PENDING_ISOLATED_ROLLBACK"
+    "E4": "PASS_SCOPED_12_UNIT_36_HTTP",
+    "E6": "PASS_CROSS_PYTHON_REPRODUCIBLE",
+    "E8": "PASS_CI_ON_QUALIFIED_CODE_SHA",
+    "E9": "PASS_CI_AND_RAILWAY_ISOLATED",
+    "E10": "PARTIAL_NEAR_REQUEST_LIMIT_AND_SOAK_NOT_DONE",
+    "E11": "PASS_SCOPED_NEGATIVE_SECURITY_TESTS",
+    "E12": "PASS_OBSERVABILITY_EVIDENCE",
+    "E13": "PASS_RC1_RC5_RC1",
+    "E14": "BLOCKED_FULL_REVIEW_AND_SOAK"
   },
   "eligible": false,
   "verdict": "FAIL — CORE OS MERGE BLOCKED",
-  "reason": "PR CI passed previous SHA; current corrected SHA not yet qualified. Isolated runtime, security and rollback still pending.",
-  "candidate_sha": "bfa769850c648121541e82665ef1644a6281ebf1",
-  "pr": 1
+  "reason": "Tests isolés, sécurité et rollback qualifiés. Charge maximale/soak et revue indépendante E14 non réalisés; ce commit documentaire exige son propre CI avant toute fusion."
 }
