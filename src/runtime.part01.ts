@@ -2,8 +2,8 @@ import { SQL } from 'bun';
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { buildCapabilityPlan, PlannerError } from './capability-planner.ts';
 
-const VERSION = '1.1.0-rc.5';
-const BUILD = 'SELFCONTAINED_RC5';
+const VERSION = '1.2.0-rc.1';
+const BUILD = 'COREOS_1_2_RC1';
 const CONTRACT_VERSION = 'COREOS_INTEGRATION_CONTRACT_V1';
 const POLICY_VERSION = 'COREOS_CAPACITY_POLICY_V1';
 const PROVIDER_INTERFACES = Object.freeze([
