@@ -24,6 +24,13 @@ jobs:
           python3 scripts/build_release.py
           cmp /tmp/first.ts dist/coreos-1.2.0-rc.1.ts
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Rebuild identical artifact under Python 3.13
+        run: |
+          python3 scripts/build_release.py
+          cmp /tmp/first.ts dist/coreos-1.2.0-rc.1.ts
   isolated-qualification:
     runs-on: ubuntu-latest
     services:
