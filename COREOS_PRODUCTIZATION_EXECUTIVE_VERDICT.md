@@ -3,8 +3,9 @@
 **Verdict primaire : `CONDITIONAL PASS — CORE OS PRODUCTIZATION QUALIFIED / PILOT BLOCKED`**
 
 - Release testée : `1.1.0-rc.5` / `SELFCONTAINED_RC5`
-- Commit source runtime : `791515df92011453be106b7586324f123a2595cc`
+- Commit source runtime qualifié : `791515df92011453be106b7586324f123a2595cc`
 - SHA-256 source runtime : `580124cd5b14725bc941c341a73a774ef72f0b269ff02ee07fa119a0a99cc102`
+- Dépôt canonique produit : `bourgarelmaxime-bot/coreos`
 - Environnement : Railway `COREOS-V1-PRODUCT-RC` / `rc`
 - Baseline héritée : `COREOS-V1.0.0 — PASS — CORE OS V1 CONSOLIDATED`
 - P0→P6 : PASS
@@ -21,7 +22,7 @@ RC5 passe 41/41 tests live, le SDK passe 12/12, le soak passe 200/200, le bootst
 
 ## Sécurité / rollback / limites
 
-Sécurité P4 PASS. État final fail-closed. Rollback RC4 qualifié. Limites : authentification HMAC plutôt qu'OIDC/mTLS, aucune application externe réelle pilotée, et publication GitHub bloquée par l'outil actuel bien que le dépôt Git canonique existe localement.
+Sécurité P4 PASS. État final fail-closed. Rollback RC4 qualifié. Limites : authentification HMAC plutôt qu'OIDC/mTLS, aucune application externe réelle pilotée, rate limit encore local à un replica API et aucune revendication de production multi-région/HA API.
 
 ## Pilot
 
