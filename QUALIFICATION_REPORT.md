@@ -20,7 +20,7 @@ Base: `378003ad23d7902f988edc52dee327917121c5c6`
 
 ## Qualification state
 
-Repository/CI tests: PENDING PR CI.  
+PR CI on predecessor SHA `26ce03204eec0b459a973f4ef7d7ff357a1bf964`: PASS (GitHub Actions run 41698968028: repository checks, planner unit suite, deterministic artifact).\nSecurity correction: provider `required_permissions` must be enforced against authenticated scopes; committed new unit falsification (12th test).\nCurrent PR HEAD `bfa769850c648121541e82665ef1644a6281ebf1`: CI PENDING for exact corrected SHA.  
 Isolated runtime integration: PENDING.  
 Security negative qualification: PENDING beyond unit-level planner checks.  
 Rollback qualification: PENDING isolated runtime test.
