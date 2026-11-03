@@ -1,0 +1,8 @@
+{
+  "base_sha":"378003ad23d7902f988edc52dee327917121c5c6",
+  "candidate_branch":"feat/1.2-capability-graph-planner",
+  "database_migration":false,
+  "rollback_method":"Revert candidate code to base SHA; no schema down migration required.",
+  "qualification":"PENDING_ISOLATED_RUNTIME_ROLLBACK_TEST",
+  "production_rollback_authorized":false
+}
