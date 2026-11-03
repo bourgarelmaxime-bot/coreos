@@ -1,0 +1,18 @@
+{
+  "release": "1.1.0-rc.5",
+  "generated_at_utc": "2026-11-03T09:00:00Z",
+  "entries": [
+    {"id":"E-P0-001","claim":"legacy/product boundary reconstructed","source":"Railway/Neon/GitHub inventories"},
+    {"id":"E-P1-001","claim":"migration replay identical on two Neon branches for initial schema","result":"PASS"},
+    {"id":"E-P1-002","claim":"self-contained rollback RC5→RC4","deployment":"4c455a48-260e-4b49-a510-0e2a0b54569a","result":"PASS"},
+    {"id":"E-P1-003","claim":"roll-forward RC4→RC5","deployment":"75f4c0ba-2bbf-402a-88f0-166a3dcac4e9","result":"PASS"},
+    {"id":"E-P1-004","claim":"fresh bootstrap replay from canonical migrations","neon_project_id":"shiny-thunder-66387824","result":"PASS","migrations":4,"tables":8,"audit_triggers":2,"kill_switch":true,"paused":false,"migration_004_validation":"five UPDATE statements EXPLAINed with analyze=false; zero legacy rows on fresh database; migration version registered without executing data updates"},
+    {"id":"E-P2-P4-001","claim":"RC5 live qualification","result":"41/41 PASS"},
+    {"id":"E-P3-001","claim":"edge/service/Postgres trace","trace_id":"73d4aec9b5a04cf0e7eec72e4cabe163","result":"PASS"},
+    {"id":"E-P4-001","claim":"audit UPDATE/DELETE rejected","result":"PASS"},
+    {"id":"E-P5-001","claim":"SDK + 3 adapters","result":"12/12 PASS"},
+    {"id":"E-P6-001","claim":"RC5 bounded soak","result":"200/200 PASS","p95_ms":74.6},
+    {"id":"E-P6-DEFECT-001","claim":"RC2 rollback packaging defect discovered","result":"REPAIRED","error":"Z_DATA_ERROR invalid distance too far back"},
+    {"id":"E-SAFETY-001","claim":"final control state","kill_switch":true,"paused":false,"external_actuation":false}
+  ]
+}

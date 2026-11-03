@@ -1,0 +1,36 @@
+{
+  "version": "COREOS_INTEGRATION_CONTRACT_V1",
+  "request_fields": [
+    "objective",
+    "constraints",
+    "available_capabilities",
+    "authority",
+    "budget",
+    "state_reference",
+    "providers"
+  ],
+  "provider_interfaces": [
+    "CapabilityProvider",
+    "StateProvider",
+    "ResourceProvider",
+    "AuthorityProvider",
+    "TelemetryProvider",
+    "ActionProvider",
+    "EvidenceSink"
+  ],
+  "outputs": [
+    "execution_plan",
+    "resource_requests",
+    "observations",
+    "recommendations",
+    "evidence",
+    "result"
+  ],
+  "invariants": {
+    "application_opaque": true,
+    "authority_explicit": true,
+    "budget_explicit": true,
+    "evidence_required": true,
+    "no_domain_specific_semantics": true
+  }
+}

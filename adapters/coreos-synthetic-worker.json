@@ -1,0 +1,27 @@
+{
+  "adapter_id": "coreos.synthetic-worker",
+  "version": "1.0.0",
+  "interfaces": [
+    "ResourceProvider",
+    "ActionProvider",
+    "TelemetryProvider"
+  ],
+  "capabilities": [
+    "capacity.adjust",
+    "capacity.observe"
+  ],
+  "required_permissions": [
+    "adapter:synthetic"
+  ],
+  "mutation_surface": {
+    "external": false
+  },
+  "timeout": {
+    "default_ms": 2000,
+    "max_ms": 10000
+  },
+  "rollback_capability": true,
+  "cost": {
+    "nominal": 1
+  }
+}

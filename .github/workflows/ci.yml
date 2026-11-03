@@ -1,0 +1,23 @@
+name: coreos-ci
+on:
+  push:
+  pull_request:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Repository checks
+        run: python3 tests/repository_checks.py
+      - name: Deterministic release build
+        run: |
+          python3 scripts/build_release.py
+          cp dist/coreos-1.1.0-rc.5.ts /tmp/first.ts
+          python3 scripts/build_release.py
+          cmp /tmp/first.ts dist/coreos-1.1.0-rc.5.ts

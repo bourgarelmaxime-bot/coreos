@@ -1,0 +1,24 @@
+{
+  "adapter_id": "coreos.noop",
+  "version": "1.0.0",
+  "interfaces": [
+    "ActionProvider",
+    "TelemetryProvider",
+    "EvidenceSink"
+  ],
+  "capabilities": [
+    "noop.execute"
+  ],
+  "required_permissions": [],
+  "mutation_surface": {
+    "external": false
+  },
+  "timeout": {
+    "default_ms": 1000,
+    "max_ms": 5000
+  },
+  "rollback_capability": true,
+  "cost": {
+    "nominal": 0
+  }
+}

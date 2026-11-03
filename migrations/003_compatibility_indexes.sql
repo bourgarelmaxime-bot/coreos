@@ -1,0 +1,10 @@
+BEGIN;
+CREATE INDEX IF NOT EXISTS coreos_requests_app_created_idx ON coreos_product.requests(app_id,created_at);
+CREATE INDEX IF NOT EXISTS coreos_requests_status_idx ON coreos_product.requests(status);
+CREATE INDEX IF NOT EXISTS coreos_executions_app_updated_idx ON coreos_product.executions(app_id,updated_at);
+CREATE INDEX IF NOT EXISTS coreos_executions_status_idx ON coreos_product.executions(status);
+CREATE INDEX IF NOT EXISTS coreos_evidence_execution_seq_idx ON coreos_product.evidence(execution_id,seq);
+CREATE INDEX IF NOT EXISTS coreos_evidence_trace_idx ON coreos_product.evidence(trace_id);
+CREATE INDEX IF NOT EXISTS coreos_audit_app_seq_idx ON coreos_product.audit_events(app_id,seq);
+INSERT INTO coreos_product.schema_migrations(version,name) VALUES(3,'compatibility_indexes') ON CONFLICT(version) DO NOTHING;
+COMMIT;

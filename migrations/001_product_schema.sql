@@ -1,0 +1,13 @@
+BEGIN;
+CREATE SCHEMA IF NOT EXISTS coreos_product;
+CREATE TABLE IF NOT EXISTS coreos_product.schema_migrations(version integer PRIMARY KEY,name text NOT NULL,applied_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS coreos_product.requests(request_id text PRIMARY KEY,execution_id text NOT NULL UNIQUE,app_id text NOT NULL,status text NOT NULL,payload jsonb NOT NULL,created_at timestamptz NOT NULL,updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS coreos_product.executions(execution_id text PRIMARY KEY,request_id text NOT NULL UNIQUE,app_id text NOT NULL,status text NOT NULL,trace_id text NOT NULL,build text NOT NULL,payload jsonb NOT NULL,created_at timestamptz NOT NULL,updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS coreos_product.evidence(seq bigserial PRIMARY KEY,event_id text NOT NULL UNIQUE,execution_id text NOT NULL,app_id text NOT NULL,trace_id text NOT NULL,event jsonb NOT NULL,ts timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS coreos_product.providers(app_id text NOT NULL,adapter_id text NOT NULL,version text NOT NULL,descriptor jsonb NOT NULL,health text NOT NULL,updated_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(app_id,adapter_id));
+CREATE TABLE IF NOT EXISTS coreos_product.idempotency(app_id text NOT NULL,idempotency_key text NOT NULL,response jsonb NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(app_id,idempotency_key));
+CREATE TABLE IF NOT EXISTS coreos_product.controls(id integer PRIMARY KEY,kill_switch boolean NOT NULL DEFAULT true,paused boolean NOT NULL DEFAULT false,updated_at timestamptz NOT NULL DEFAULT now());
+INSERT INTO coreos_product.controls(id,kill_switch,paused) VALUES(1,true,false) ON CONFLICT(id) DO NOTHING;
+CREATE TABLE IF NOT EXISTS coreos_product.audit_events(seq bigserial PRIMARY KEY,event_id text NOT NULL UNIQUE,app_id text NOT NULL,event_type text NOT NULL,event jsonb NOT NULL,previous_hash text NOT NULL,event_hash text NOT NULL UNIQUE,ts timestamptz NOT NULL);
+INSERT INTO coreos_product.schema_migrations(version,name) VALUES(1,'product_schema') ON CONFLICT(version) DO NOTHING;
+COMMIT;

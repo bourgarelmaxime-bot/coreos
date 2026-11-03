@@ -1,0 +1,68 @@
+openapi: 3.1.0
+info:
+  title: CORE OS Public API
+  version: 1.1.0-rc.5
+  description: API publique application-agnostic de CORE OS.
+servers:
+  - url: https://coreos-api-rc-rc.up.railway.app
+security:
+  - bearerAuth: []
+paths:
+  /healthz:
+    get: {security: [], responses: {'200': {description: Healthy}}}
+  /readyz:
+    get: {security: [], responses: {'200': {description: Ready}, '503': {description: Not ready}}}
+  /v1/version:
+    get: {responses: {'200': {description: Version/build identity}}}
+  /v1/capabilities:
+    get: {responses: {'200': {description: Contract and provider discovery}}}
+  /v1/requests:
+    post:
+      parameters: [{in: header, name: idempotency-key, schema: {type: string}}]
+      responses: {'201': {description: Planned request}, '400': {description: Validation error}, '403': {description: Authority/application error}, '409': {description: Idempotency conflict}, '413': {description: Payload too large}, '422': {description: Budget exceeded}}
+  /v1/requests/{request_id}:
+    get:
+      parameters: [{in: path, name: request_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Request}, '403': {description: Cross-application access denied}, '404': {description: Not found}}
+  /v1/requests/{request_id}/cancel:
+    post:
+      parameters: [{in: path, name: request_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Cancelled}, '409': {description: Invalid lifecycle state}}
+  /v1/executions/{execution_id}:
+    get:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Execution}}
+  /v1/executions/{execution_id}/start:
+    post:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Executed}, '403': {description: Authority forbids execution}, '423': {description: Kill switch engaged}}
+  /v1/executions/{execution_id}/plan:
+    get:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Execution plan}}
+  /v1/executions/{execution_id}/result:
+    get:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Execution result}}
+  /v1/executions/{execution_id}/evidence:
+    get:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}, {in: query, name: offset, schema: {type: integer}}, {in: query, name: limit, schema: {type: integer, maximum: 100}}]
+      responses: {'200': {description: Evidence page}}
+  /v1/executions/{execution_id}/receipt:
+    get:
+      parameters: [{in: path, name: execution_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Final execution receipt}}
+  /v1/providers:
+    get: {responses: {'200': {description: Application provider registry}}}
+    post: {responses: {'201': {description: Provider registered}, '403': {description: Provider permission/mutation denied}}}
+  /v1/control/state:
+    get: {responses: {'200': {description: Runtime controls}}}
+  /v1/control/kill-switch:
+    post: {responses: {'200': {description: Kill switch changed}, '403': {description: Insufficient scope}}}
+  /v1/audit:
+    get: {responses: {'200': {description: Append-only application audit page}}}
+  /v1/observability/summary:
+    get: {responses: {'200': {description: Operator summary}}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}

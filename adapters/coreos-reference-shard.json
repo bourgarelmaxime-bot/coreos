@@ -1,0 +1,28 @@
+{
+  "adapter_id": "coreos.reference-shard",
+  "version": "1.0.0",
+  "interfaces": [
+    "ResourceProvider",
+    "ActionProvider",
+    "TelemetryProvider"
+  ],
+  "capabilities": [
+    "capacity.adjust",
+    "capacity.observe",
+    "backlog.redistribute"
+  ],
+  "required_permissions": [
+    "adapter:reference-sandbox"
+  ],
+  "mutation_surface": {
+    "external": false
+  },
+  "timeout": {
+    "default_ms": 5000,
+    "max_ms": 30000
+  },
+  "rollback_capability": true,
+  "cost": {
+    "nominal": 1
+  }
+}

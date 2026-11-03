@@ -1,0 +1,15 @@
+{
+  "baseline":"COREOS-V1.0.0",
+  "p0_verdict":"P0 PASS — PRODUCTIZATION BASELINE ESTABLISHED",
+  "components":[
+    {"component":"V0.11–V0.16 Railway Functions","classification":"TEST_ONLY","disposition":"historical evidence only"},
+    {"component":"coreos_v08/v12/v14/v15/v16 schemas","classification":"REFERENCE_IMPLEMENTATION","disposition":"not public product persistence"},
+    {"component":"COREOS_INTEGRATION_CONTRACT_V1","classification":"CANONICAL","disposition":"preserved"},
+    {"component":"src/runtime.ts","classification":"CANONICAL","disposition":"product runtime"},
+    {"component":"migrations/001-004","classification":"CANONICAL","disposition":"product persistence"},
+    {"component":"qualification harnesses","classification":"TEST_ONLY","disposition":"release qualification"}
+  ],
+  "closed_gaps":["canonical Git repository","stable API","private product schema","migrations","auth/scopes","app isolation","idempotency","rate limiting","SDK","adapter descriptors","structured logs","tracing","rollback target","release manifest","documentation","portable CI workflow definition"],
+  "blockers":[],
+  "known_limitations":["No real external application has been piloted.","HMAC service-token scheme is qualified for the RC; federated/OIDC identity is not implemented.","Audit rows are append-only at DB level; hash linking is integrity metadata, not claimed as a globally serialized transparency ledger.","RC is single API replica; horizontal API scaling was not a P6 criterion."]
+}

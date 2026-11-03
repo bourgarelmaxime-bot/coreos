@@ -1,0 +1,13 @@
+{
+  "release":"1.1.0-rc.5","build":"SELFCONTAINED_RC5","runtime_source_commit":"791515df92011453be106b7586324f123a2595cc","runtime_source_sha256":"580124cd5b14725bc941c341a73a774ef72f0b269ff02ee07fa119a0a99cc102","tests":[
+    {"id":"BOOTSTRAP-REPLAY-RC5","class":"release/migrations","result":"PASS","neon_project_id":"shiny-thunder-66387824","migrations":4,"tables":8,"audit_triggers":2,"kill_switch":true,"legacy_rows":0},
+    {"id":"RC5-LIVE","class":"api/security/adaptive","result":"PASS","passed":41,"total":41},
+    {"id":"SDK-RC5","class":"sdk/adapters","result":"PASS","passed":12,"total":12},
+    {"id":"SOAK-RC5","class":"soak","result":"PASS","requests":200,"http_201":200,"p95_ms":74.6},
+    {"id":"ROLLBACK-RC5-RC4","class":"release/resilience","result":"PASS","data_persisted":true,"kill_switch":true},
+    {"id":"ROLLFORWARD-RC4-RC5","class":"release/resilience","result":"PASS","data_persisted":true,"kill_switch":true},
+    {"id":"AUDIT-IMMUTABILITY-RC5","class":"security","result":"PASS","update_blocked":true,"delete_blocked":true},
+    {"id":"TRACING-RC5","class":"observability","result":"PASS","trace_id":"73d4aec9b5a04cf0e7eec72e4cabe163","spans":6,"errors":0,"postgres_child_span":true},
+    {"id":"FAILED-ROLLBACK-RC2","class":"release defect discovery","result":"FAIL_REPAIRED","defect":"mutable env-segment artifact produced Z_DATA_ERROR","repair":"self-contained RC4/RC5 snapshots"}
+  ]
+}
