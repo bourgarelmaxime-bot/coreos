@@ -45,6 +45,12 @@ describe('COREOS_CAPABILITY_GRAPH_PLANNER_V1',()=>{
     expect(code(()=>buildCapabilityPlan(base([{id:'a',required_interfaces:['ActionProvider']}],10,[{adapter_id:'mutator',interface:'ActionProvider',capabilities:[],mutation_surface:{external:true}}])))).toBe('UNRESOLVED_PROVIDER_REQUIREMENT');
   });
 
+  test('provider required permissions are not silently ignored',()=>{
+    const requested={...base([{id:'a',required_interfaces:['ActionProvider']}],10,[{adapter_id:'restricted',interface:'ActionProvider',capabilities:[],required_permissions:['restricted:execute']}]),authorized_scopes:['requests:write']};
+    expect(code(()=>buildCapabilityPlan(requested))).toBe('UNRESOLVED_PROVIDER_REQUIREMENT');
+    expect(buildCapabilityPlan({...requested,authorized_scopes:['restricted:execute']}).provider_assignments.a).toEqual(['restricted']);
+  });
+
   test('independent nodes are canonically ordered regardless of input order',()=>{
     const a=buildCapabilityPlan(base(['c','a','b'],3));
     const b=buildCapabilityPlan(base(['b','c','a'],3));
