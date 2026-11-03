@@ -17,6 +17,7 @@ type ProviderDescriptor = {
 type PlannerInput = {
   available_capabilities:CapabilityDescriptor[];
   providers?:ProviderDescriptor[];
+  authorized_scopes?:string[];
   authority?:{mode?:string;allow_external_mutation?:boolean};
   budget:{max_cost:number};
 };
@@ -87,6 +88,8 @@ export function buildCapabilityPlan(body:PlannerInput){
         const caps=Array.isArray(p.capabilities)?p.capabilities:[];
         if(!node.required_provider_capabilities.every(c=>caps.includes(c)))return false;
       }
+      const scopes=body.authorized_scopes||[];
+      if((p.required_permissions||[]).some(permission=>!scopes.includes(permission)&&!scopes.includes('*')))return false;
       if(p.mutation_surface?.external&&!body.authority?.allow_external_mutation)return false;
       return node.required_interfaces.length>0||node.required_provider_capabilities.length>0;
     }).map(p=>p._key).sort();
