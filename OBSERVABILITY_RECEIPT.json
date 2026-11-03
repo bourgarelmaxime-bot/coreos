@@ -1,0 +1,8 @@
+{
+  "change":"CORE OS 1.2 Capability Graph Planner",
+  "status":"IMPLEMENTED_PENDING_RUNTIME_QUALIFICATION",
+  "plan_event":"PLAN_CREATED",
+  "fields":["app_id","request_id","execution_id","trace_id","policy_version","planner_version","graph_nodes","graph_edges","unresolved","selected","estimated_cost"],
+  "sensitive_data_policy":"No credentials or provider secrets are added to planner evidence.",
+  "build_identity":"Existing VERSION/BUILD identity remains until release preparation gate."
+}
