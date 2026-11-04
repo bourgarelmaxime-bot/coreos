@@ -91,11 +91,21 @@ test('policy proposal cannot pretend observational evidence is causal',async()=>
  expect(proposal.verdict).toBe('CANDIDATE_ONLY');
  if('provider_id'in proposal)expect(proposal.provider_id).toBe('b');
 });
-test('policy version cannot become ACTIVE without production authority',()=>{
+test('refuted policy cannot be promoted from CANDIDATE by citing arbitrary evidence',()=>{
  const r=new GovernedPolicyRegistry();const p=policy('adaptive');r.register(p,'baseline');
- for(const state of ['OFFLINE_QUALIFIED','SHADOW_QUALIFIED','ISOLATED_CANARY','QUALIFIED'] as const)r.promote('p',state,['fixture-1']);
+ const gate=r.recordOfflineEvidence('p',null);
+ expect(gate.verdict).toBe('INSUFFICIENT_EVIDENCE');
+ expect(()=>r.promote('p','OFFLINE_QUALIFIED',['fixture-1'])).toThrow('POLICY_COMPARATIVE_GATE_FAILED');
  expect(()=>r.promote('p','ACTIVE',['fixture-1'],'ISOLATED')).toThrow('PRODUCTION_APPROVAL_REQUIRED');
- expect(r.get('p')?.stage).toBe('QUALIFIED');
+ expect(r.get('p')?.stage).toBe('CANDIDATE');
+});
+test('actual ablation outcome blocks global adaptive policy promotion',async()=>{
+ const r=new GovernedPolicyRegistry();r.register(policy('adaptive'),'baseline');
+ const artifact=JSON.parse(await Bun.file('MAX03_POLICY_ABLATION_RESULTS.json').text());
+ const gate=r.recordOfflineEvidence('p',artifact);
+ expect(gate.verdict).toBe('REJECT_STATISTICAL_REGRESSION');
+ expect(()=>r.promote('p','OFFLINE_QUALIFIED',['actual-ablation'])).toThrow('POLICY_COMPARATIVE_GATE_FAILED');
+ expect(r.get('p')?.stage).toBe('CANDIDATE');
 });
 test('paired synthetic drift: adaptive reduces cost with equal success and safety',async()=>{
  const providers=[provider('a-fast',{declared_cost:1,declared_latency_ms:1}),
