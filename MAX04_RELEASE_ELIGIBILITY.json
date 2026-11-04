@@ -1,0 +1,42 @@
+{
+  "schema": "COREOS_MAX04_RELEASE_ELIGIBILITY_V1",
+  "pr": 5,
+  "source_sha": "00473c5ffadd825cf8fd6e4647702079e5849f35",
+  "verdict": "CONDITIONAL PASS — QUALIFIED WITH BLOCKERS",
+  "release_eligible": false,
+  "merge_eligible": false,
+  "required_gates": {
+    "ci_exact_head": {
+      "verdict": "PASS",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41781753377"
+    },
+    "contract_security_concurrency": {
+      "verdict": "PASS",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41781041386"
+    },
+    "independent_static_analysis": {
+      "verdict": "PASS",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41781753377",
+      "findings": 0,
+      "limitations": "Automated tool, not separate independent human/agent reviewer"
+    },
+    "rollback": {
+      "verdict": "PASS",
+      "receipt": "MAX04_ROLLBACK_RECEIPT.json"
+    },
+    "soak_exact_sha": {
+      "verdict": "PENDING",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41782036482"
+    },
+    "independent_review": {
+      "verdict": "BLOCKED",
+      "reason": "Separate independent reviewer unavailable; CodeQL cannot substitute for mandatory adversarial code review"
+    },
+    "crash_mid_execution_recovery": {
+      "verdict": "NOT_DEMONSTRATED",
+      "reason": "No durable execution ownership/lease for restart reconciliation"
+    }
+  },
+  "human_decision_required_now": false,
+  "production_human_gate_required_before_live_action": true
+}

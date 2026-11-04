@@ -53,7 +53,11 @@ async function startExecution(id:string,ctx:any){
   exe.status='RUNNING';exe.started_at=nowIso();
   const claimed=await db`update coreos_product.executions set status='RUNNING',payload=${exe},updated_at=now() where execution_id=${id} and status='PLANNED' and exists (select 1 from coreos_product.controls where id=1 and kill_switch=false and paused=false) returning execution_id`;
   if(claimed.length!==1)return{error:'INVALID_STATE',status:409};
-  req.status='RUNNING';await saveRequest(req);
+  req.status='RUNNING';
+  // The request must not be resurrected if cancellation committed after the
+  // execution's initial CAS but before the associated request was claimed.
+  const requestClaim=await db`update coreos_product.requests set status='RUNNING',payload=${req},updated_at=now() where request_id=${req.request_id} and status='PLANNED' returning request_id`;
+  if(requestClaim.length!==1)return{error:'EXECUTION_CANCELLED_OR_CONFLICT',status:409};
   const started=evidenceEvent({appId:ctx.app_id,requestId:req.request_id,executionId:id,traceId:exe.trace_id,type:'EXECUTION_STARTED',observed:{kill_switch:false},decision:'EXECUTE',reason:'AUTHORIZED_BOUNDED_EXECUTION',action:{adapter:'coreos.noop'},effect:{mutated_external:false},cost:{actual:0}});await appendEvidence(id,started);await appendAudit(started);
   const wf=req.constraints?.adaptive_workflow;
   if(wf && Array.isArray(wf.levels) && Array.isArray(wf.observations)){

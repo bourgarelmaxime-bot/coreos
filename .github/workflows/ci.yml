@@ -3,6 +3,59 @@ on:
   push:
   pull_request:
 jobs:
+  codeql-security-review:
+    name: CodeQL security-extended (third-party static analysis)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assemble actual runtime for independent CodeQL source analysis
+        run: |
+          python3 scripts/build_release.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path('src')
+          parts=sorted(root.glob('runtime.part*.ts'))
+          assert len(parts)>=3, 'Expected split canonical runtime'
+          data=b''.join(p.read_bytes() for p in parts)
+          (root/'runtime.security.ts').write_bytes(data)
+          for p in parts:
+              p.rename(p.with_suffix('.sourcefrag'))
+          legacy=root/'runtime.ts'
+          if legacy.exists():
+              legacy.rename(root/'runtime.legacy-source')
+          print('MAX04_CODEQL_CANONICAL_RUNTIME_SHA256',hashlib.sha256(data).hexdigest())
+          print('MAX04_CODEQL_SPLIT_PARTS',len(parts))
+          PY
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - name: Analyze TypeScript security
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: '/language:javascript-typescript'
+      - name: Validate CodeQL SARIF coverage and findings
+        run: python3 qualification/max04-codeql-report.py
+      - name: Stage CodeQL SARIF within repository workspace
+        if: always()
+        run: cp ../results/javascript.sarif max04-codeql.sarif
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: max04-codeql-sarif
+          path: |
+            max04-codeql.sarif
+            max04-codeql-summary.json
+          if-no-files-found: warn
+          retention-days: 30
   validate:
     runs-on: ubuntu-latest
     steps:
@@ -66,5 +119,11 @@ jobs:
         run: bun run qualification/isolated-gate.ts
       - name: MAX03 concurrency safety falsification
         run: bun run qualification/max03-concurrency-gate.ts
+      - name: MAX04 cancellation/start race falsification
+        run: bun run qualification/max04-cancel-race.ts
+      - name: MAX04 disposable PostgreSQL outage and reconnect
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: bun run qualification/max04-db-fault.ts
       - name: MAX03 preregistered load and graph/payload limits
         run: bun run qualification/max03-load-gate.ts
