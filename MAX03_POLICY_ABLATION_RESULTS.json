@@ -1,0 +1,235 @@
+{
+  "schema": "MAX03_POLICY_ABLATION_RESULT_V1",
+  "qualified_code_sha": "34280f82774503321b4e9e99282a7198a30a5a8d",
+  "ci_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
+  "specification": "MAX03_POLICY_ABLATION_SPEC.json",
+  "evidence_kind": "EXECUTED_CODE_GITHUB_ACTIONS_SEEDED_SYNTHETIC",
+  "global_policy_promotion": "REJECTED_FOR_TESTED_SCENARIOS",
+  "production_value_verdict": "VALUE_UNPROVEN",
+  "reasons": [
+    "Statistically clear cost regression in stable synthetic environment",
+    "No demonstrated improvement in drift or equal-noise environments",
+    "Synthetic declared/modelled costs are not verified financial expenditures"
+  ],
+  "data": {
+    "event": "MAX03_ABLATION_REPORT",
+    "verdict": "PASS_EXPERIMENT_EXECUTION",
+    "provenance": "SEEDED_SYNTHETIC_ONLY",
+    "seed": 193847,
+    "workloads_per_scenario": 200,
+    "strategies": [
+      "first_fit",
+      "least_cost",
+      "pareto",
+      "adaptive"
+    ],
+    "scenarios": [
+      {
+        "scenario": "stable",
+        "arms": [
+          {
+            "strategy": "first_fit",
+            "successes": 200,
+            "modeled_cost": 219.19999999999993,
+            "cost_per_success": 1.0959999999999996,
+            "mean_attempts": 1.06,
+            "success_rate": 1,
+            "fallback_count": 12
+          },
+          {
+            "strategy": "least_cost",
+            "successes": 200,
+            "modeled_cost": 216.80000000000007,
+            "cost_per_success": 1.0840000000000003,
+            "mean_attempts": 1.06,
+            "success_rate": 1,
+            "fallback_count": 12
+          },
+          {
+            "strategy": "pareto",
+            "successes": 200,
+            "modeled_cost": 219.19999999999993,
+            "cost_per_success": 1.0959999999999996,
+            "mean_attempts": 1.06,
+            "success_rate": 1,
+            "fallback_count": 12
+          },
+          {
+            "strategy": "adaptive",
+            "successes": 200,
+            "modeled_cost": 259.3999999999996,
+            "cost_per_success": 1.296999999999998,
+            "mean_attempts": 1.03,
+            "success_rate": 1,
+            "fallback_count": 6
+          }
+        ],
+        "paired_baseline_vs_adaptive": {
+          "mean_modeled_cost_saved_per_work": -0.2010000000000003,
+          "bootstrap_95pct_CI": [
+            -0.25500000000000034,
+            -0.14500000000000018
+          ],
+          "replications": 1000
+        },
+        "noninferior_success": true,
+        "trial_verdict": "SYNTHETIC_COST_REGRESSION"
+      },
+      {
+        "scenario": "preferred_degraded",
+        "arms": [
+          {
+            "strategy": "first_fit",
+            "successes": 199,
+            "modeled_cost": 428.00000000000085,
+            "cost_per_success": 2.1507537688442255,
+            "mean_attempts": 1.715,
+            "success_rate": 0.995,
+            "fallback_count": 139
+          },
+          {
+            "strategy": "least_cost",
+            "successes": 199,
+            "modeled_cost": 437.79999999999933,
+            "cost_per_success": 2.1999999999999966,
+            "mean_attempts": 1.83,
+            "success_rate": 0.995,
+            "fallback_count": 139
+          },
+          {
+            "strategy": "pareto",
+            "successes": 199,
+            "modeled_cost": 428.00000000000085,
+            "cost_per_success": 2.1507537688442255,
+            "mean_attempts": 1.715,
+            "success_rate": 0.995,
+            "fallback_count": 139
+          },
+          {
+            "strategy": "adaptive",
+            "successes": 199,
+            "modeled_cost": 331.6000000000005,
+            "cost_per_success": 1.6663316582914598,
+            "mean_attempts": 1.06,
+            "success_rate": 0.995,
+            "fallback_count": 9
+          }
+        ],
+        "paired_baseline_vs_adaptive": {
+          "mean_modeled_cost_saved_per_work": 0.48200000000000043,
+          "bootstrap_95pct_CI": [
+            0.3660000000000005,
+            0.5870000000000002
+          ],
+          "replications": 1000
+        },
+        "noninferior_success": true,
+        "trial_verdict": "SYNTHETIC_ADVANTAGE_SUPPORTED"
+      },
+      {
+        "scenario": "drift",
+        "arms": [
+          {
+            "strategy": "first_fit",
+            "successes": 200,
+            "modeled_cost": 311.60000000000014,
+            "cost_per_success": 1.5580000000000007,
+            "mean_attempts": 1.35,
+            "success_rate": 1,
+            "fallback_count": 68
+          },
+          {
+            "strategy": "least_cost",
+            "successes": 200,
+            "modeled_cost": 319.1999999999998,
+            "cost_per_success": 1.5959999999999992,
+            "mean_attempts": 1.415,
+            "success_rate": 1,
+            "fallback_count": 68
+          },
+          {
+            "strategy": "pareto",
+            "successes": 200,
+            "modeled_cost": 311.60000000000014,
+            "cost_per_success": 1.5580000000000007,
+            "mean_attempts": 1.35,
+            "success_rate": 1,
+            "fallback_count": 68
+          },
+          {
+            "strategy": "adaptive",
+            "successes": 200,
+            "modeled_cost": 314.4000000000002,
+            "cost_per_success": 1.572000000000001,
+            "mean_attempts": 1.05,
+            "success_rate": 1,
+            "fallback_count": 8
+          }
+        ],
+        "paired_baseline_vs_adaptive": {
+          "mean_modeled_cost_saved_per_work": -0.014000000000000415,
+          "bootstrap_95pct_CI": [
+            -0.1170000000000002,
+            0.09599999999999988
+          ],
+          "replications": 1000
+        },
+        "noninferior_success": true,
+        "trial_verdict": "SYNTHETIC_ADVANTAGE_UNPROVEN"
+      },
+      {
+        "scenario": "noisy_equal",
+        "arms": [
+          {
+            "strategy": "first_fit",
+            "successes": 196,
+            "modeled_cost": 286.4,
+            "cost_per_success": 1.4612244897959183,
+            "mean_attempts": 1.28,
+            "success_rate": 0.98,
+            "fallback_count": 40
+          },
+          {
+            "strategy": "least_cost",
+            "successes": 196,
+            "modeled_cost": 275.20000000000005,
+            "cost_per_success": 1.4040816326530614,
+            "mean_attempts": 1.26,
+            "success_rate": 0.98,
+            "fallback_count": 40
+          },
+          {
+            "strategy": "pareto",
+            "successes": 196,
+            "modeled_cost": 286.4,
+            "cost_per_success": 1.4612244897959183,
+            "mean_attempts": 1.28,
+            "success_rate": 0.98,
+            "fallback_count": 40
+          },
+          {
+            "strategy": "adaptive",
+            "successes": 196,
+            "modeled_cost": 288.0000000000001,
+            "cost_per_success": 1.4693877551020413,
+            "mean_attempts": 1.28,
+            "success_rate": 0.98,
+            "fallback_count": 42
+          }
+        ],
+        "paired_baseline_vs_adaptive": {
+          "mean_modeled_cost_saved_per_work": -0.007999999999999965,
+          "bootstrap_95pct_CI": [
+            -0.08700000000000002,
+            0.07200000000000002
+          ],
+          "replications": 1000
+        },
+        "noninferior_success": true,
+        "trial_verdict": "SYNTHETIC_ADVANTAGE_UNPROVEN"
+      }
+    ],
+    "real_world_value": "VALUE_UNPROVEN",
+    "no_policy_promotion": true
+  }
+}
