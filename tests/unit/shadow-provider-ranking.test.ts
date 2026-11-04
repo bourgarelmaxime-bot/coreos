@@ -17,6 +17,7 @@ const metric=(id:string,override:Partial<ObservedMetrics>={}):ObservedMetrics=>(
   observed_cost_per_success_usd:0.10,observed_latency_p95_ms:800,...override
 });
 const request=(override:Partial<ShadowRankingRequest>={}):ShadowRankingRequest=>({
+  evidence_mode:'VERIFIED_OBSERVATIONS',
   tenant_id:'tenant-a',capability:'inference',baseline_provider_id:'base',
   authorized_scopes:['inference:read'],max_cost_usd:1,max_latency_ms:5000,
   required_quality_floor:0.75,max_noninferiority_margin:0.05,
@@ -136,4 +137,23 @@ test('Pareto frontier identifies non-dominated quality-qualified options',()=>{
  const r=shadowRankProviders(q);
  expect(r.nondominated_provider_ids).toEqual(['alternative']);
  expect(r.recommended_provider_id).toBe('alternative');
+});
+
+test('synthetic evidence cannot masquerade as real, but may exercise ranking without promotion',()=>{
+ const synthetic=(m:ObservedMetrics):ObservedMetrics=>({...m,
+  quality_source:'SIMULATED_FIXTURE',cost_source:'SIMULATED_FIXTURE',
+  latency_source:'SIMULATED_FIXTURE'});
+ const q=request({evidence_mode:'SYNTHETIC_FIXTURE',observed:[
+  synthetic(metric('base')),synthetic(metric('alternative',{
+   quality_mean:0.96,quality_ci95_low:0.94,quality_ci95_high:0.99,
+   observed_cost_per_success_usd:0.05,observed_latency_p95_ms:900
+  }))
+ ]});
+ const r=shadowRankProviders(q);
+ expect(r.evidence_mode).toBe('SYNTHETIC_FIXTURE');
+ expect(r.reason).toBe('CONSERVATIVE_CANDIDATE_FOUND');
+ expect(r.actionable).toBe(false);
+ expect(r.can_promote).toBe(false);
+ expect(r.economic_value_verdict).toBe('VALUE_UNPROVEN');
+ expect(()=>shadowRankProviders({...q,evidence_mode:'VERIFIED_OBSERVATIONS'})).toThrow(ShadowRankingError);
 });
