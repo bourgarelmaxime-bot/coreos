@@ -3,6 +3,23 @@ on:
   push:
   pull_request:
 jobs:
+  codeql-security-review:
+    name: CodeQL security-extended (third-party static analysis)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - name: Analyze TypeScript security
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'
   validate:
     runs-on: ubuntu-latest
     steps:
