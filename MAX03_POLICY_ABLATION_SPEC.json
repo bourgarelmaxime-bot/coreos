@@ -1,0 +1,85 @@
+{
+  "schema": "MAX03_POLICY_ABLATION_SPEC_V1",
+  "preregistered_before_execution": true,
+  "kind": "FULLY_SYNTHETIC_NOT_PRODUCTION",
+  "run_seed": 193847,
+  "workloads_per_scenario": 200,
+  "policies": [
+    "first_fit",
+    "least_cost",
+    "pareto",
+    "adaptive"
+  ],
+  "provider_contract": [
+    {
+      "id": "a-preferred",
+      "declared_cost": 1,
+      "declared_latency_ms": 1
+    },
+    {
+      "id": "b-reliable",
+      "declared_cost": 1.6,
+      "declared_latency_ms": 2
+    },
+    {
+      "id": "c-reserve",
+      "declared_cost": 1.4,
+      "declared_latency_ms": 3
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "stable",
+      "failure_probabilities": {
+        "a": 0.05,
+        "b": 0.05,
+        "c": 0.05
+      }
+    },
+    {
+      "name": "preferred_degraded",
+      "failure_probabilities": {
+        "a": 0.7,
+        "b": 0.05,
+        "c": 0.2
+      }
+    },
+    {
+      "name": "drift",
+      "failure_probabilities": {
+        "a_first_half": 0.05,
+        "a_second_half": 0.7,
+        "b": 0.05,
+        "c": 0.2
+      }
+    },
+    {
+      "name": "noisy_equal",
+      "failure_probabilities": {
+        "a": 0.25,
+        "b": 0.25,
+        "c": 0.25
+      }
+    }
+  ],
+  "accepted_safety": {
+    "external_mutations": 0,
+    "budget_violations": 0,
+    "unauthorized_providers": 0
+  },
+  "measures": [
+    "success_rate",
+    "mean_modeled_cost_per_success",
+    "paired_modeled_cost_difference",
+    "fallback_rate",
+    "bootstrap_95pct_CI_for_paired_cost_diff"
+  ],
+  "bootstrap_replicates": 1000,
+  "freeze_rule": "Do not change scenario probabilities or metrics after run to manufacture gains; any revisions become a separately versioned experiment.",
+  "value_hypotheses": [
+    "Adaptive cost improvement under persistent preferred-provider degradation",
+    "No significant adaptive advantage when provider reliability is equal",
+    "Adaptation may degrade after regime shift; do not auto-promote on global average."
+  ],
+  "promotion": "NEVER; exploratory evidence only"
+}
