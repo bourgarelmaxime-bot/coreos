@@ -68,5 +68,9 @@ jobs:
         run: bun run qualification/max03-concurrency-gate.ts
       - name: MAX04 cancellation/start race falsification
         run: bun run qualification/max04-cancel-race.ts
+      - name: MAX04 disposable PostgreSQL outage and reconnect
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: bun run qualification/max04-db-fault.ts
       - name: MAX03 preregistered load and graph/payload limits
         run: bun run qualification/max03-load-gate.ts
