@@ -33,7 +33,8 @@
       "append_only": true,
       "policy_stage": "QUALIFIED",
       "production_promotion": "DENIED",
-      "value_verdict": "VALUE_UNPROVEN"
+      "value_verdict": "VALUE_UNPROVEN",
+      "historical_only_before_comparative_gate": true
     },
     {
       "id": "MAX03-ABLATED-200x4-v1",
@@ -76,6 +77,21 @@
       },
       "conclusion": "DO_NOT_PROMOTE_GLOBAL_ADAPTIVE_POLICY",
       "value_for_real_world": "VALUE_UNPROVEN"
+    },
+    {
+      "id": "MAX03-POLICY-GATE-NEGATIVE-QUALIFICATION",
+      "kind": "FAIL_CLOSED_UNDER_NEGATIVE_COMPARATIVE_EVIDENCE",
+      "status": "PASS",
+      "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41774529381",
+      "source_sha": "0cdba2de155e42780557d393f0e915fa533957ee",
+      "actual_policy_state": "CANDIDATE",
+      "reason": "Stable-environment synthetic cost regression prevents OFFLINE_QUALIFIED and ACTIVE transitions",
+      "registry_scope": [
+        "GovernedPolicyRegistry in-process",
+        "SyntheticLearningStore PostgreSQL"
+      ],
+      "production_promotion": "DENIED",
+      "value_verdict": "VALUE_UNPROVEN_FOR_REAL_WORLD"
     }
   ]
 }

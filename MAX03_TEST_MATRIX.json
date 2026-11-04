@@ -156,6 +156,14 @@
       "result": "PASS_EXECUTION_GLOBAL_CANDIDATE_REJECTED",
       "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
       "artifact": "MAX03_POLICY_ABLATION_RESULTS.json"
+    },
+    {
+      "id": "C-PROMOTION-COMP-GATE",
+      "name": "Regression evidence blocks candidate promotion in in-memory and PG registries",
+      "result": "PASS_FAIL_CLOSED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41774529381",
+      "policy_state": "CANDIDATE",
+      "comparative_gate": "REJECT_STATISTICAL_REGRESSION"
     }
   ]
 }
