@@ -33,7 +33,65 @@
       "append_only": true,
       "policy_stage": "QUALIFIED",
       "production_promotion": "DENIED",
-      "value_verdict": "VALUE_UNPROVEN"
+      "value_verdict": "VALUE_UNPROVEN",
+      "historical_only_before_comparative_gate": true
+    },
+    {
+      "id": "MAX03-ABLATED-200x4-v1",
+      "kind": "PREREGISTERED_SEEDED_SYNTHETIC",
+      "status": "PASS_EXECUTION_BUT_GLOBAL_CANDIDATE_REJECTED",
+      "source_sha": "34280f82774503321b4e9e99282a7198a30a5a8d",
+      "specification": "MAX03_POLICY_ABLATION_SPEC.json",
+      "results": "MAX03_POLICY_ABLATION_RESULTS.json",
+      "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
+      "sample_per_regime": 200,
+      "regimes": [
+        "stable",
+        "preferred_degraded",
+        "drift",
+        "noisy_equal"
+      ],
+      "baseline": "first_fit",
+      "candidate": "adaptive",
+      "results_summary": {
+        "stable": {
+          "baseline_cost": 219.2,
+          "adaptive_cost": 259.4,
+          "verdict": "REGRESSION"
+        },
+        "preferred_degraded": {
+          "baseline_cost": 428,
+          "adaptive_cost": 331.6,
+          "verdict": "TARGETED_SYNTHETIC_ADVANTAGE"
+        },
+        "drift": {
+          "baseline_cost": 311.6,
+          "adaptive_cost": 314.4,
+          "verdict": "UNPROVEN"
+        },
+        "noisy_equal": {
+          "baseline_cost": 286.4,
+          "adaptive_cost": 288,
+          "verdict": "UNPROVEN"
+        }
+      },
+      "conclusion": "DO_NOT_PROMOTE_GLOBAL_ADAPTIVE_POLICY",
+      "value_for_real_world": "VALUE_UNPROVEN"
+    },
+    {
+      "id": "MAX03-POLICY-GATE-NEGATIVE-QUALIFICATION",
+      "kind": "FAIL_CLOSED_UNDER_NEGATIVE_COMPARATIVE_EVIDENCE",
+      "status": "PASS",
+      "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41774529381",
+      "source_sha": "0cdba2de155e42780557d393f0e915fa533957ee",
+      "actual_policy_state": "CANDIDATE",
+      "reason": "Stable-environment synthetic cost regression prevents OFFLINE_QUALIFIED and ACTIVE transitions",
+      "registry_scope": [
+        "GovernedPolicyRegistry in-process",
+        "SyntheticLearningStore PostgreSQL"
+      ],
+      "production_promotion": "DENIED",
+      "value_verdict": "VALUE_UNPROVEN_FOR_REAL_WORLD"
     }
   ]
 }

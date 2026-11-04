@@ -17,6 +17,8 @@ jobs:
         run: python3 tests/repository_checks.py
       - name: Capability planner unit tests
         run: bun test tests/unit/*.test.ts
+      - name: MAX03 paired synthetic policy ablation
+        run: bun run qualification/max03-policy-ablation.ts
       - name: Deterministic release build
         run: |
           python3 scripts/build_release.py
@@ -68,3 +70,5 @@ jobs:
         run: bun run qualification/max03-concurrency-gate.ts
       - name: MAX03 preregistered load and graph/payload limits
         run: bun run qualification/max03-load-gate.ts
+      - name: MAX03 durable governed learning on disposable Postgres
+        run: bun run qualification/max03-learning-gate.ts

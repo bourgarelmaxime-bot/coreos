@@ -118,6 +118,52 @@
         "start_conflicts": 11,
         "audit_forks": 0
       }
+    },
+    {
+      "id": "A-PAYLOAD-CHUNKED-NEGATIVE",
+      "name": "No Content-Length chunked >1MiB fails closed",
+      "result": "PASS_POST_RED_GREEN",
+      "red_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41772872913",
+      "green_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773024017"
+    },
+    {
+      "id": "A-REFERENCE-RESTORE",
+      "name": "Bounded adaptive legacy reference regression",
+      "result": "PASS_POST_RED_GREEN",
+      "red_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773467988",
+      "green_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773536451"
+    },
+    {
+      "id": "A-SOAK-2X1800S",
+      "name": "Two sustained 30min PG17 isolated tests on pre-stream-fix source",
+      "result": "PASS_PRIOR_SOURCE",
+      "runs": [
+        "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769866115",
+        "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104"
+      ],
+      "request_count": 3987,
+      "failed": 0
+    },
+    {
+      "id": "A-SOAK-FINAL-CANDIDATE",
+      "name": "Sustained soak on post-stream-fix source",
+      "result": "PENDING",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773280716"
+    },
+    {
+      "id": "C-ABLATED-200X4",
+      "name": "Four seeded synthetic regimes x 200 workloads with bootstrap paired intervals",
+      "result": "PASS_EXECUTION_GLOBAL_CANDIDATE_REJECTED",
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
+      "artifact": "MAX03_POLICY_ABLATION_RESULTS.json"
+    },
+    {
+      "id": "C-PROMOTION-COMP-GATE",
+      "name": "Regression evidence blocks candidate promotion in in-memory and PG registries",
+      "result": "PASS_FAIL_CLOSED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41774529381",
+      "policy_state": "CANDIDATE",
+      "comparative_gate": "REJECT_STATISTICAL_REGRESSION"
     }
   ]
 }

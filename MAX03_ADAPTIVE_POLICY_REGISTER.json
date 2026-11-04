@@ -21,23 +21,40 @@
   "runtime_activated": false,
   "production_authority": false,
   "empirical_evidence": "MAX03_EXPERIMENT_REGISTER.json",
-  "current_verdict": "CANDIDATE_ONLY",
+  "current_verdict": "CANDIDATE_BLOCKED_BY_EMPIRICAL_REGRESSION",
   "notes": [
     "No persistent policy store",
     "No cross-instance scheduler",
-    "User confirmation/production gate required before ACTIVE"
+    "User confirmation/production gate required before ACTIVE",
+    "The in-process and PostgreSQL registries now reject promotion without a positive comparative gate; further shadow/canary and production states remain fail-closed."
   ],
   "durable_candidate_registry": {
     "source_pr": 3,
     "migration": "005_max03_learning_registry.sql",
     "schema": "coreos_product.orchestration_policy_candidates",
-    "qualified_isolated": true,
+    "qualified_isolated": false,
     "active": false,
     "observations_schema": "coreos_product.orchestration_outcomes",
     "limits": [
       "Only synthetic input source",
       "No automated live policy activation",
       "No independent causal evaluation"
-    ]
+    ],
+    "current_policy_stage": "CANDIDATE",
+    "comparative_gate": "FAIL_STATISTICAL_REGRESSION",
+    "qualification_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41774529381"
+  },
+  "qualified_for_global_promotion": false,
+  "global_candidate_ablation": {
+    "source": "MAX03_POLICY_ABLATION_RESULTS.json",
+    "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
+    "decision": "DO_NOT_PROMOTE",
+    "reasons": [
+      "stable synthetic environment cost regression",
+      "no generalized advantage in drift/noisy_equal",
+      "no real-world data"
+    ],
+    "targeted_exploration_only": "preferred_degraded",
+    "active": false
   }
 }

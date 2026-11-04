@@ -13,3 +13,11 @@ Un moteur expérimental générique exécute réellement des adaptateurs synthé
 Les correctifs ont désormais passé la qualification de sécurité/concurrence et la charge courte à la fois sur CI et sur Railway/Neon isolés. Le retour arrière vers RC5 puis le retour en avant vers le candidat durci ont réussi sans perte de fixture, le kill switch restant engagé. La phase d'apprentissage dispose d'un stockage PostgreSQL append-only expérimental pour les résultats synthétiques, et son activation production est bloquée.
 
 Le verdict de release reste cependant **bloqué** : le soak de 30 minutes n'est pas conclu et aucune revue indépendante n'a été obtenue. Les essais multi-réplicas, la sécurité d'actions externes et les gains réels restent non démontrés.
+
+## Complément — résultats empiriques et sécurité
+
+Deux vulnérabilités de régression ont été découvertes par falsification : dépassement de la limite d'un corps HTTP en streaming et panne du parcours adaptatif historique (`decide` manquant). Les tests ont échoué sur les versions défectueuses puis réussi après correction. Les deux soaks pré-correctifs de 30 minutes ont terminé avec 3 987 soumissions réussies et zéro rupture de chaîne d'audit ; le soak post-correctif est en cours.
+
+L'ablation préenregistrée multi-scénarios **rejette l'activation générale** de la politique adaptative : économie modélisée seulement en dégradation persistante (428 → 331,6) et régression nette en conditions stables (219,2 → 259,4). Cela justifie un futur mécanisme d'activation sélective et une qualification comparative sur des données réelles, non une promotion automatique.
+
+La politique adaptative est maintenant refusée **dans le mécanisme de promotion**, et pas seulement dans un rapport : le nouveau test de qualification empêche la progression de `CANDIDATE` vers `OFFLINE_QUALIFIED` lorsque l'étude révèle une régression statistique. L'état persistant reste `CANDIDATE`, sans activation possible ni effet externe.
