@@ -16,7 +16,20 @@ async function handler(req:Request){
     const auth=(req.headers.get('authorization')||'');const vr=verifyToken(auth.startsWith('Bearer ')?auth.slice(7):'');if(!vr.ok)return finish(err(vr.code,401,traceId));const claims:any=vr.claims;appId=claims.app_id;if(!allowRate(appId))return finish(err('RATE_LIMITED',429,traceId));
     const ctx={app_id:appId,scopes:claims.scopes,trace_id:traceId,idempotency_key:req.headers.get('idempotency-key')||undefined};
     const scope=(s:string)=>hasScope(claims,s);
-    const body=async()=>{try{return await req.json()}catch{return null}};
+    // Content-Length is optional for chunked requests. Bound actual streamed bytes.
+    const body=async()=>{
+      if(!req.body)return null;
+      const reader=req.body.getReader();const chunks:Uint8Array[]=[];let received=0;
+      try{
+        while(true){
+          const {done,value}=await reader.read();if(done)break;
+          received+=value.byteLength;
+          if(received>MAX_BODY_BYTES){try{await reader.cancel('PAYLOAD_TOO_LARGE');}catch{}throw new Error('PAYLOAD_TOO_LARGE');}
+          chunks.push(value);
+        }
+      }finally{reader.releaseLock();}
+      try{return JSON.parse(Buffer.concat(chunks,received).toString('utf8'));}catch{return null;}
+    };
     if(path==='/v1/version'&&req.method==='GET')return finish(json({product:'CORE OS',version:VERSION,build:BUILD,contract:CONTRACT_VERSION,policy:POLICY_VERSION},200,traceId));
     if(path==='/v1/capabilities'&&req.method==='GET')return finish(json({contract:CONTRACT_VERSION,provider_interfaces:PROVIDER_INTERFACES,features:['planning','bounded_execution','adaptive_reference_execution','evidence','providers','kill_switch','idempotency','audit','observability']},200,traceId));
     if(path==='/v1/requests'&&req.method==='POST'){if(!scope('requests:write'))return finish(err('INSUFFICIENT_SCOPE',403,traceId));const r=await submit(await body(),ctx);return finish(r.error?err(r.error,r.status,traceId,r.details):json(r,201,traceId));}
