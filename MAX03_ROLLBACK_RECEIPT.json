@@ -1,12 +1,45 @@
 {
-  "qualified_prior_baseline": {
-    "source_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
-    "history": "RC1 -> RC5 -> RC1 PASS",
-    "receipt": "ROLLBACK_RECEIPT.json"
+  "schema": "MAX03_ROLLBACK_RECEIPT_V1",
+  "date": "2026-11-04",
+  "status": "PASS_ISOLATED_NEW_HARDENED_ARTIFACT",
+  "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+  "artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
+  "runtime_sha256": "0be6821790ea614254dd7582b6f06ce4b9fd283d36b434c37afb63e735398b18",
+  "stages": [
+    {
+      "step": "hardened_before",
+      "deployment": "333b7a2b-8ad7-42b0-934f-ecbc4d16c10a",
+      "commit": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+      "status": "SUCCESS",
+      "hosted_gate": "PASS"
+    },
+    {
+      "step": "rollback_historical_RC5",
+      "deployment": "9f2d34dd-247a-4612-9adf-1cec4f795ad9",
+      "commit": "378003ad23d7902f988edc52dee327917121c5c6",
+      "status": "SUCCESS",
+      "historical_runtime_sha256": "580124cd5b14725bc941c341a73a774ef72f0b269ff02ee07fa119a0a99cc102"
+    },
+    {
+      "step": "rollforward_hardened",
+      "deployment": "92497d43-e0db-4227-aecd-f6b62b68cf4e",
+      "commit": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+      "status": "SUCCESS",
+      "hosted_gate": "PASS"
+    }
+  ],
+  "fixture": {
+    "execution_id": "1f510721-0d30-43fe-8034-3ebf1ff9e6c2",
+    "status_before": "SUCCEEDED",
+    "status_during": "SUCCEEDED",
+    "status_after": "SUCCEEDED",
+    "evidence_count": 2,
+    "kill_switch_after": true
   },
-  "current_max03_head": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
-  "validated_ci_artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
-  "roll_back_current_head_qualified": false,
-  "reason": "No Railway/Neon rollback has yet been executed on the updated MAX03 transactional/CAS code; historical proof cannot transfer.",
-  "production_rollback_authorized": false
+  "database": "Neon autumn-block-76700490 / isolated qualification",
+  "production_rollback_authorized": false,
+  "limitations": [
+    "Only single-instance reversible deployment",
+    "No partial-upgrade, multi-replica failover or in-flight action rollback verified"
+  ]
 }

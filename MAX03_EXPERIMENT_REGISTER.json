@@ -21,6 +21,19 @@
         "Observational feedback is in-memory, not durable"
       ],
       "value_verdict": "VALUE_UNPROVEN_FOR_REAL_ORCHESTRATION"
+    },
+    {
+      "id": "MAX03-DURABLE-OUTCOMES-PG17",
+      "status": "PASS_ISOLATED_SYNTHETIC",
+      "source_pr": 3,
+      "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174",
+      "observations_persisted": 10,
+      "tenant_isolation": true,
+      "temporal_cutoff": true,
+      "append_only": true,
+      "policy_stage": "QUALIFIED",
+      "production_promotion": "DENIED",
+      "value_verdict": "VALUE_UNPROVEN"
     }
   ]
 }

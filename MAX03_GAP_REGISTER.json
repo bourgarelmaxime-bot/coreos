@@ -50,15 +50,17 @@
       "id": "G-A-07",
       "capability": "current security hardening hosted rollback",
       "initial": "ABSENT",
-      "current": "UNVERIFIED",
-      "notes": "Prior RC1 rollback does not qualify PR2 SHA"
+      "current": "IMPLEMENTED",
+      "notes": "Hardened candidate 1.2 RC1 single-instance rollback PASS",
+      "evidence": "Railway 333b7a2b -> 9f2d34dd -> 92497d43, Neon fixture persisted"
     },
     {
       "id": "G-B-01",
       "capability": "generic synthetic adapter execution",
       "initial": "ABSENT",
       "current": "IMPLEMENTED",
-      "location": "PR #3"
+      "location": "PR #3",
+      "notes": "PR3 graph-to-synthetic-adapter execution + observed evidence tests PASS"
     },
     {
       "id": "G-B-02",
@@ -83,7 +85,8 @@
       "id": "G-C-02",
       "capability": "durable tenant-isolated outcome storage and temporal holdout",
       "initial": "ABSENT",
-      "current": "ABSENT"
+      "current": "PARTIAL",
+      "notes": "PR3 migration005 durable tenant-isolated synthetic outcomes, append-only, temporal cutoff; independent holdout evaluation and production credentials still absent"
     },
     {
       "id": "G-C-03",

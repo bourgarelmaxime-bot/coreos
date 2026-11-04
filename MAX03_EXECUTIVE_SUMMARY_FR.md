@@ -7,3 +7,9 @@ Une charge courte a réussi, notamment à 16 appels simultanés avec un p95 mesu
 Un moteur expérimental générique exécute réellement des adaptateurs synthétiques, sélectionne les providers sous contraintes et conserve leurs observations en mémoire. Sur 12 scénarios contrôlés, le coût déclaré a été réduit de 27,8 % par rapport à first-fit à succès égal, dans un scénario artificiel ciblé. Cela ne démontre pas encore une amélioration généralisable.
 
 **Le système n'est pas encore un produit d'orchestration adaptative complet.** La revue indépendante, les essais de panne, le rollback du nouveau code, la gestion distribuée des ressources, la persistance des observations et la preuve d'une valeur supérieure au baseline restent ouverts. Les PR #1, #2 et #3 ne sont pas fusionnées. Aucune activation en production n'est autorisée.
+
+## Qualification hébergée et réversibilité MAX-03
+
+Les correctifs ont désormais passé la qualification de sécurité/concurrence et la charge courte à la fois sur CI et sur Railway/Neon isolés. Le retour arrière vers RC5 puis le retour en avant vers le candidat durci ont réussi sans perte de fixture, le kill switch restant engagé. La phase d'apprentissage dispose d'un stockage PostgreSQL append-only expérimental pour les résultats synthétiques, et son activation production est bloquée.
+
+Le verdict de release reste cependant **bloqué** : le soak de 30 minutes n'est pas conclu et aucune revue indépendante n'a été obtenue. Les essais multi-réplicas, la sécurité d'actions externes et les gains réels restent non démontrés.

@@ -43,9 +43,10 @@
       "components": [
         "versioned registry",
         "observation ranking",
-        "candidate proposal"
+        "candidate proposal",
+        "durable synthetic outcomes in PostgreSQL migration 005 (PR3)"
       ],
-      "status": "PARTIAL_IN_MEMORY_PR3"
+      "status": "PARTIAL_PERSISTENT_SYNTHETIC_PR3"
     },
     {
       "name": "production",

@@ -1,6 +1,6 @@
 {
   "schema": "MAX03_RELEASE_ELIGIBILITY_V1",
-  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
   "phase_A": "CONDITIONAL PASS — QUALIFIED WITH BLOCKERS",
   "phase_B": "CONDITIONAL PASS — QUALIFIED WITH BLOCKERS",
   "phase_C": "CONDITIONAL PASS — QUALIFIED WITH BLOCKERS",
@@ -10,9 +10,10 @@
   "deploy_production_allowed": false,
   "soak": "RUNNING_UNVERIFIED",
   "independent_review": "PENDING",
-  "current_head_rollback": "PENDING",
+  "current_head_rollback": "PASS_ISOLATED",
   "capacity_fairness": "ABSENT",
   "live_adapter": "ABSENT",
   "governed_learning": "PARTIAL_SYNTHETIC",
-  "value_claim": "VALUE_UNPROVEN_FOR_REAL_USE"
+  "value_claim": "VALUE_UNPROVEN_FOR_REAL_USE",
+  "hosted_qualification": "PASS_SCOPED"
 }
