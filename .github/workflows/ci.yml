@@ -44,12 +44,15 @@ jobs:
           category: '/language:javascript-typescript'
       - name: Validate CodeQL SARIF coverage and findings
         run: python3 qualification/max04-codeql-report.py
+      - name: Stage CodeQL SARIF within repository workspace
+        if: always()
+        run: cp ../results/javascript.sarif max04-codeql.sarif
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: max04-codeql-sarif
           path: |
-            ../results/javascript.sarif
+            max04-codeql.sarif
             max04-codeql-summary.json
           if-no-files-found: warn
           retention-days: 30
