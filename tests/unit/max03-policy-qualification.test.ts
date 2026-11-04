@@ -1,6 +1,7 @@
 import {test,expect} from 'bun:test';
+import {readFileSync} from 'node:fs';
 import {assessGlobalSyntheticPolicy} from '../../src/policy-qualification.ts';
-const verified=()=>JSON.parse(require('node:fs').readFileSync('MAX03_POLICY_ABLATION_RESULTS.json','utf8'));
+const verified=()=>JSON.parse(readFileSync('MAX03_POLICY_ABLATION_RESULTS.json','utf8'));
 test('actual seeded four-regime evidence REJECTS global policy due to stable regression',()=>{
  const r=assessGlobalSyntheticPolicy(verified());
  expect(r.verdict).toBe('REJECT_STATISTICAL_REGRESSION');
