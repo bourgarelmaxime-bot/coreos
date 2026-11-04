@@ -47,14 +47,19 @@ async function main(){
  check(tamper,'append_only_update_rejected');
  await store.registerCandidate('t1','policy-candidate-1','baseline-v1');
  check((await store.candidate('t1','policy-candidate-1'))?.stage==='CANDIDATE','candidate_created');
- for(const state of ['OFFLINE_QUALIFIED','SHADOW_QUALIFIED','ISOLATED_CANARY','QUALIFIED'] as const)await store.advance('t1','policy-candidate-1',state,['max03-synthetic-fixture']);
- let promotionBlocked=false;try{await store.advance('t1','policy-candidate-1','ACTIVE',['max03-synthetic-fixture']);}
+ const ablation=JSON.parse(await Bun.file('MAX03_POLICY_ABLATION_RESULTS.json').text());
+ let comparativeBlocked=false;
+ try{await store.advance('t1','policy-candidate-1','OFFLINE_QUALIFIED',['MAX03_POLICY_ABLATION_RESULTS'],ablation);}
+ catch(e:any){comparativeBlocked=e.code==='POLICY_COMPARATIVE_GATE_FAILED';}
+ check(comparativeBlocked,'global_policy_negative_comparative_gate');
+ let promotionBlocked=false;
+ try{await store.advance('t1','policy-candidate-1','ACTIVE',['max03-synthetic-fixture']);}
  catch(e:any){promotionBlocked=e.code==='PRODUCTION_APPROVAL_REQUIRED';}
  check(promotionBlocked,'active_promotion_denied');
- check((await store.candidate('t1','policy-candidate-1'))?.stage==='QUALIFIED','candidate_unchanged');
+ check((await store.candidate('t1','policy-candidate-1'))?.stage==='CANDIDATE','candidate_not_misqualified');
  console.log(JSON.stringify({event:'MAX03_DURABLE_LEARNING_GATE',verdict:'PASS',persisted_outcomes:persisted,
    tenant_isolation:true,no_lookahead:true,append_only:true,production_promotion_blocked:true,
-   policy_stage:'QUALIFIED',synthetic_only:true,db_schema_migration:5}));
+   comparative_promotion_blocked:true,policy_stage:'CANDIDATE',synthetic_only:true,db_schema_migration:5}));
 }
 try{await main();}catch(e:any){console.error(JSON.stringify({event:'MAX03_DURABLE_LEARNING_GATE',verdict:'FAIL',reason:String(e)}));process.exitCode=1;}
 finally{await db.close();}
