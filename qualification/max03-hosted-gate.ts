@@ -1,6 +1,6 @@
 import {SQL} from 'bun';
 // Isolated Railway qualification only, without any production application providers.
-const stages=['qualification/isolated-gate.ts','qualification/max03-concurrency-gate.ts','qualification/max03-load-gate.ts'];
+const stages=['qualification/isolated-gate.ts','qualification/max03-concurrency-gate.ts','qualification/max04-cancel-race.ts','qualification/max03-load-gate.ts'];
 const env={...process.env,COREOS_QUAL_KEEP_ALIVE:'0',COREOS_BOOTSTRAP_SQL:'0',MAX03_SOAK_SECONDS:'0'};
 let db:SQL|null=null;
 try{
