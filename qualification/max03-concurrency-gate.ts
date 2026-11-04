@@ -3,7 +3,7 @@ import {createHmac,randomUUID} from 'node:crypto';
 const sql=new SQL(Bun.env.DATABASE_URL||'');
 const secret=Bun.env.COREOS_AUTH_SECRET||'';
 const address='http://127.0.0.1:'+String(Bun.env.PORT||34123);
-const tokenPayload=Buffer.from(JSON.stringify({iss:'coreos',app_id:'max03-fixture',scopes:['requests:write','control:kill'],exp:Math.floor(Date.now()/1000)+1200})).toString('base64url');
+const tokenPayload=Buffer.from(JSON.stringify({iss:'coreos',app_id:'max03-fixture',scopes:['requests:write','executions:execute','control:kill'],exp:Math.floor(Date.now()/1000)+1200})).toString('base64url');
 const auth='Bearer '+tokenPayload+'.'+createHmac('sha256',secret).update(tokenPayload).digest('base64url');
 const request=(id:string)=>({objective:'MAX03_CONCURRENCY_'+id,constraints:{},available_capabilities:['a'],authority:{mode:'recommendation',allow_external_mutation:false},budget:{max_cost:1},state_reference:{},providers:[]});
 let proc:any;
@@ -42,7 +42,23 @@ async function main(){
  const kill=await sql.unsafe('select kill_switch from coreos_product.controls where id=1');
  assert(kill[0].kill_switch===true,'empty_control_payload_fail_closed');
  assert(invalid.status===400,'empty_control_payload_rejected');
- console.log(JSON.stringify({event:'MAX03_CONCURRENCY_GATE',verdict:'PASS',concurrency:24,wave_count:48,unique_idempotent_requests:ids.length,audit_forks:forks[0].n,orphans:orphan[0].n,kill_switch:true}));
+ // Concurrent start requests must have a single winner even with an initially disabled kill-switch.
+ const startBody={...request('start-race'),authority:{mode:'execute',allow_external_mutation:false}};
+ const startRequest=await submit(startBody,'max03-execution-'+randomUUID());
+ assert(startRequest.status===201,'start_fixture_created');
+ await sql.unsafe('update coreos_product.controls set kill_switch=false where id=1');
+ let accepted=0,conflicted=0;
+ try{
+   const started=await Promise.all(Array.from({length:12},()=>fetch(address+'/v1/executions/'+startRequest.json.execution_id+'/start',{
+     method:'POST',headers:{Authorization:auth,'content-type':'application/json'},body:'{}'
+   })));
+   accepted=started.filter(x=>x.status===200).length;
+   conflicted=started.filter(x=>x.status===409).length;
+ }finally{await sql.unsafe('update coreos_product.controls set kill_switch=true where id=1');}
+ const duplicates=await sql.unsafe('select count(*)::integer n from coreos_product.evidence where execution_id=$1 and event->>\'type\'=\'EXECUTION_STARTED\'',[startRequest.json.execution_id]);
+ console.log(JSON.stringify({event:'MAX03_EXECUTION_START_RACE',attempts:12,succeeded:accepted,conflicts:conflicted,started_events:duplicates[0].n}));
+ assert(accepted===1&&conflicted===11&&duplicates[0].n===1,'execution_single_winner');
+ console.log(JSON.stringify({event:'MAX03_CONCURRENCY_GATE',verdict:'PASS',concurrency:24,wave_count:48,unique_idempotent_requests:ids.length,audit_forks:forks[0].n,orphans:orphan[0].n,kill_switch:true,execution_starts:1}));
 }
 try{await main();}catch(e:any){console.error(JSON.stringify({event:'MAX03_CONCURRENCY_GATE',verdict:'FAIL',reason:String(e)}));process.exitCode=1;}finally{
  try{await sql.unsafe('update coreos_product.controls set kill_switch=true,updated_at=now() where id=1');}catch{}
