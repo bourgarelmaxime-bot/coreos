@@ -42,3 +42,13 @@ L'audit indépendant E14 et le résultat du soak 30min restent PENDING ; pas de 
 ## Concurrence entre deux processus (04/11/2026)
 
 Le test `qualification/max03-concurrency-gate.ts` lance deux instances Bun indépendantes connectées au même PostgreSQL jetable. CI `https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41772019930` : 24 appels idempotents simultanés → 1 requête ; 12 démarrages simultanés → 1 succès, 11 conflits ; 1 événement `EXECUTION_STARTED`, 0 fourche d'audit. **PASS**. Ce test démontre des transactions inter-processus mais ne constitue pas une qualification d'orchestration distribuée multi-région ou de présence d'un vrai provider.
+
+## MAX-03 — Corrections sécurité et fonctionnalité, tests rouge → vert
+
+Le corps JSON **chunked** sans `Content-Length` dépassant 1 Mio avait été accepté (échec attesté run 41772872913). Correction par comptage incrémental des octets ; nouvelle CI PASS run 41773024017. L'ancien `adaptive_workflow` retournait HTTP 500 car `decide` n'était plus défini (run 41773467988) ; fonction restaurée depuis RC5, régression PASS run 41773536451. Ces preuves concernent le code plus récent, et invalident le raccourci consistant à transférer automatiquement les receipts d'un ancien SHA.
+
+Les deux soaks 30 minutes sur le snapshot antérieur : 1994/1994 et 1993/1993 requêtes, zéro erreur, zéro fork de chaîne, kill switch ON (runs 41769866115, 41769871104). Un nouveau soak du code post-correction a été lancé : run 41773280716, **non conclu lors de cette rédaction**.
+
+## Phase C — Falsification par ablation préenregistrée
+
+Test de 4 politiques sur 200 tâches par scénario, avec appariement déterministe, seed fixe et bootstrap 95 % sur le coût modélisé par tâche. CI 41773817156 ; sources exactes : `MAX03_POLICY_ABLATION_SPEC.json` et `MAX03_POLICY_ABLATION_RESULTS.json`. Stable : first-fit 219,2 contre adaptatif 259,4 (**régression**). Provider privilégié durablement dégradé : 428 contre 331,6 (**avantage synthétique ciblé**). Drift : 311,6 contre 314,4 ; bruit égal : 286,4 contre 288 (**gain non prouvé**). La politique adaptative générale ne passe pas le gate de valeur. **Aucune promotion de politique**. Les coûts sont simulés et non des dépenses vérifiées.

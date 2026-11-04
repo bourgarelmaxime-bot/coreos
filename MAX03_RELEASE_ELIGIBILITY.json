@@ -9,11 +9,14 @@
   "merge_allowed": false,
   "deploy_production_allowed": false,
   "soak": "RUNNING_UNVERIFIED",
-  "independent_review": "PENDING",
-  "current_head_rollback": "PASS_ISOLATED",
+  "independent_review": "NOT_PERFORMED",
+  "current_head_rollback": "PENDING_AFTER_STREAMED_BODY_AND_LEGACY_FUNCTION_FIX",
   "capacity_fairness": "ABSENT",
   "live_adapter": "ABSENT",
   "governed_learning": "PARTIAL_SYNTHETIC",
-  "value_claim": "VALUE_UNPROVEN_FOR_REAL_USE",
-  "hosted_qualification": "PASS_SCOPED"
+  "value_claim": "VALUE_UNPROVEN_REAL_WORLD; GLOBAL_PROMOTION_REFUTED_SYNTHETIC",
+  "hosted_qualification": "PASS_SCOPED",
+  "release_eligibility_after_max03": "BLOCKED",
+  "preregistered_ablation": "MAX03_POLICY_ABLATION_RESULTS.json",
+  "sustained_soak": "PASS_2_PRIOR_SOURCE_SHA; LATEST_FIX_RUN_PENDING"
 }

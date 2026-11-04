@@ -21,7 +21,7 @@
   "runtime_activated": false,
   "production_authority": false,
   "empirical_evidence": "MAX03_EXPERIMENT_REGISTER.json",
-  "current_verdict": "CANDIDATE_ONLY",
+  "current_verdict": "GLOBAL_CANDIDATE_REJECTED_BY_STABLE_REGRESSION",
   "notes": [
     "No persistent policy store",
     "No cross-instance scheduler",
@@ -39,5 +39,18 @@
       "No automated live policy activation",
       "No independent causal evaluation"
     ]
+  },
+  "qualified_for_global_promotion": false,
+  "global_candidate_ablation": {
+    "source": "MAX03_POLICY_ABLATION_RESULTS.json",
+    "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773817156",
+    "decision": "DO_NOT_PROMOTE",
+    "reasons": [
+      "stable synthetic environment cost regression",
+      "no generalized advantage in drift/noisy_equal",
+      "no real-world data"
+    ],
+    "targeted_exploration_only": "preferred_degraded",
+    "active": false
   }
 }

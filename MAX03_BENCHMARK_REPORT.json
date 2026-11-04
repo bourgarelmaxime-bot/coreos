@@ -47,7 +47,7 @@
   "over_max_body_http": 413,
   "audit_forks": 0,
   "short_load_gate": "PASS",
-  "sustained_1800s_gate": "RUNNING_UNVERIFIED",
+  "sustained_1800s_gate": "PASS_ON_PRE_SECURITY_FIX_SNAPSHOT",
   "sustained_run_url": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104",
   "measurement_limitations": [
     "Small local burst only; 96 samples per stage",
@@ -84,5 +84,27 @@
       "Short local loop within host; not public-network benchmarking",
       "No formal CPU/RSS/DB connection utilization analysis"
     ]
-  }
+  },
+  "sustained_runs": [
+    {
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769866115",
+      "duration_s": 1800.859418967,
+      "requests": 1994,
+      "failed": 0,
+      "audit_forks": 0
+    },
+    {
+      "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104",
+      "duration_s": 1800.464790909,
+      "requests": 1993,
+      "failed": 0,
+      "audit_forks": 0
+    }
+  ],
+  "latest_security_fix_soak": {
+    "run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773280716",
+    "source_sha": "6f2f328ff95c5e5ec4d7384db48f258bd31156ca",
+    "status": "IN_PROGRESS_NOT_QUALIFIED"
+  },
+  "preregistered_adaptive_ablation": "MAX03_POLICY_ABLATION_RESULTS.json"
 }

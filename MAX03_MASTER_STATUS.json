@@ -11,15 +11,21 @@
     "audit_forks": 0,
     "unit_and_36_http_pass": true,
     "short_load_pass": true,
-    "near_max_request_pass": true
+    "near_max_request_pass": true,
+    "prior_code_30min_soaks_passed": 2,
+    "chunked_body_overflow_rejected_on_latest_A_CI": true,
+    "reference_adaptive_execution_restored_on_latest_A_CI": true
   },
   "active": {
     "soak_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104",
-    "independent_review": "UNAVAILABLE_CURRENT_CONTEXT",
+    "independent_review": "NOT_PERFORMED",
     "rollback_current_head": "PASS_ISOLATED",
     "adaptive_synthetic": "PR3_TESTED_GRAPH_TO_ADAPTER_END_TO_END",
     "governed_learning": "DURABLE_PG_EXPERIMENTAL_PR3_NO_ACTIVE",
-    "cross_process_safety": "PASS_TWO_BUN_PROCESSES_SHARED_POSTGRES"
+    "cross_process_safety": "PASS_TWO_BUN_PROCESSES_SHARED_POSTGRES",
+    "latest_source_soak": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41773280716",
+    "preregistered_synthetic_ablation": "MAX03_POLICY_ABLATION_RESULTS.json",
+    "adaptive_global_promotion": "BLOCKED_EMPIRICAL_STABLE_REGRESSION"
   },
   "artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
   "runtime_sha256": "0be6821790ea614254dd7582b6f06ce4b9fd283d36b434c37afb63e735398b18",
@@ -40,5 +46,7 @@
     "start_winners_from_12": 1,
     "start_conflicts_from_12": 11,
     "audit_forks": 0
-  }
+  },
+  "pr2_latest_engineering_sha": "5687f74cace41ddab1f5746e8f94f099edff284a",
+  "pr3_latest_qualified_code_sha": "34280f82774503321b4e9e99282a7198a30a5a8d"
 }
