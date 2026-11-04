@@ -11,6 +11,28 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assemble actual runtime for independent CodeQL source analysis
+        run: |
+          python3 scripts/build_release.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path('src')
+          parts=sorted(root.glob('runtime.part*.ts'))
+          assert len(parts)>=3, 'Expected split canonical runtime'
+          data=b''.join(p.read_bytes() for p in parts)
+          (root/'runtime.security.ts').write_bytes(data)
+          for p in parts:
+              p.rename(p.with_suffix('.sourcefrag'))
+          legacy=root/'runtime.ts'
+          if legacy.exists():
+              legacy.rename(root/'runtime.legacy-source')
+          print('MAX04_CODEQL_CANONICAL_RUNTIME_SHA256',hashlib.sha256(data).hexdigest())
+          print('MAX04_CODEQL_SPLIT_PARTS',len(parts))
+          PY
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
