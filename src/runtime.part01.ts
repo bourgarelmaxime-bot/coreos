@@ -87,10 +87,19 @@ function validateProvider(b:any){
 
 async function getControls(){const r=await db`select kill_switch,paused from coreos_product.controls where id=1`;return r[0]||{kill_switch:true,paused:false};}
 async function setKillSwitch(v:boolean){await db`update coreos_product.controls set kill_switch=${v},updated_at=now() where id=1`;}
-async function appendEvidence(executionId:string,event:any){await db`insert into coreos_product.evidence(event_id,execution_id,app_id,trace_id,event,ts) values(${event.event_id},${executionId},${event.app_id},${event.trace_id},${event},${event.ts}) on conflict(event_id) do nothing`;}
-async function appendAudit(event:any){
-  const prev=await db`select event_hash from coreos_product.audit_events order by seq desc limit 1`;
-  const previous=prev[0]?.event_hash||'AUDIT_ROOT'; const payload=stable(event); const eventHash=sha256(previous+'|'+payload);
-  await db`insert into coreos_product.audit_events(event_id,app_id,event_type,event,previous_hash,event_hash,ts) values(${event.event_id},${event.app_id},${event.type||'EVENT'},${event},${previous},${eventHash},${event.ts}) on conflict(event_id) do nothing`;
+async function appendEvidence(executionId:string,event:any,client:any=db){await client`insert into coreos_product.evidence(event_id,execution_id,app_id,trace_id,event,ts) values(${event.event_id},${executionId},${event.app_id},${event.trace_id},${event},${event.ts}) on conflict(event_id) do nothing`;}
+// The original global hash chain requires a database-wide serialization point.
+// pg_advisory_xact_lock remains held until COMMIT, across processes/replicas.
+async function appendAudit(event:any,transaction:any=null){
+  const persist=async (tx:any)=>{
+    await tx`select pg_advisory_xact_lock(390025)`;
+    const prev=await tx`select event_hash from coreos_product.audit_events order by seq desc limit 1`;
+    const previous=prev[0]?.event_hash||'AUDIT_ROOT';
+    const eventHash=sha256(previous+'|'+stable(event));
+    await tx`insert into coreos_product.audit_events(event_id,app_id,event_type,event,previous_hash,event_hash,ts) values(${event.event_id},${event.app_id},${event.type||'EVENT'},${event},${previous},${eventHash},${event.ts}) on conflict(event_id) do nothing`;
+  };
+  if(transaction)return persist(transaction);
+  return db.begin(persist);
 }
+
 function evidenceEvent({appId,requestId,executionId,traceId,type,observed=null,decision=null,reason=null,action=null,effect=null,cost=null}:any){return{event_id:randomUUID(),ts:nowIso(),app_id:appId,request_id:requestId,execution_id:executionId,trace_id:traceId,type,policy_version:POLICY_VERSION,observed,decision,reason,action,effect,cost};}

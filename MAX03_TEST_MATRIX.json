@@ -1,0 +1,123 @@
+{
+  "source_sha": "f9ddc28323d5dc215112164fd92deb0230982987",
+  "tests": [
+    {
+      "id": "A-CON-01",
+      "name": "24 concurrent same-key idempotency",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-CON-02",
+      "name": "12 concurrent same-execution start",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SEC-01",
+      "name": "audit chain fork under concurrent writes",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SEC-02",
+      "name": "malformed kill-switch payload",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-HTTP-01",
+      "name": "historical 36 HTTP security and contracts",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-PERF-01",
+      "name": "96 requests at concurrency 1/4/16",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-PERF-02",
+      "name": "1024-node DAG, near and over 1MiB",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SOAK-01",
+      "name": "1800s sustained write workload",
+      "result": "RUNNING_UNVERIFIED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104"
+    },
+    {
+      "id": "A-FAIL-01",
+      "name": "database outage/reconnection, cancellation racing execution",
+      "result": "PENDING"
+    },
+    {
+      "id": "A-SEC-03",
+      "name": "independent code security review",
+      "result": "PENDING"
+    },
+    {
+      "id": "A-RELEASE-01",
+      "name": "current hardening artifact rollback on Railway",
+      "result": "PENDING"
+    },
+    {
+      "id": "B-UNIT-01",
+      "name": "synthetic adaptive engine 12 unit/paired scenarios",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769452579"
+    },
+    {
+      "id": "B-INT-01",
+      "name": "HTTP synthetic adapter boundary",
+      "result": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "C-VAL-01",
+      "name": "temporal holdout, shadow vs promoted learning with confidence",
+      "result": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "A-HOST-01",
+      "name": "MAX03 HTTP concurrency and short load on isolated Railway/Neon",
+      "result": "PASS",
+      "evidence": "Railway deployment 333b7a2b-8ad7-42b0-934f-ecbc4d16c10a"
+    },
+    {
+      "id": "A-HOST-02",
+      "name": "hardened RC1 -> RC5 -> hardened RC1 rollback with same persisted fixture",
+      "result": "PASS",
+      "evidence": "MAX03_ROLLBACK_RECEIPT.json"
+    },
+    {
+      "id": "B-GRAPH-01",
+      "name": "graph-to-synthetic-adapter dependency execution and evidence",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174"
+    },
+    {
+      "id": "C-STORE-01",
+      "name": "durable 10-outcome PG registry, tenant isolation, as-of cutoff, append-only",
+      "result": "PASS_ISOLATED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174"
+    },
+    {
+      "id": "A-DIST-01",
+      "name": "Two Bun processes, common Postgres: 24 idempotent calls, 12 execution starts and audit chain",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41772019930",
+      "measurements": {
+        "server_processes": 2,
+        "idempotency_calls": 24,
+        "unique_requests": 1,
+        "start_attempts": 12,
+        "start_winners": 1,
+        "start_conflicts": 11,
+        "audit_forks": 0
+      }
+    }
+  ]
+}

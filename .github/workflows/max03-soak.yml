@@ -1,0 +1,45 @@
+name: coreos-max03-disposable-30min-soak
+on:
+  push:
+    branches:
+      - 'max03/soak-run-*'
+permissions:
+  contents: read
+jobs:
+  soak:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: qual
+          POSTGRES_PASSWORD: qual_local_only
+          POSTGRES_DB: max03_soak
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U qual -d max03_soak"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      DATABASE_URL: postgresql://qual:qual_local_only@127.0.0.1:5432/max03_soak
+      COREOS_AUTH_SECRET: max03_soak_qualification_disposable_only_12345678
+      COREOS_BOOTSTRAP_SQL: '1'
+      MAX03_SOAK_SECONDS: '1800'
+      PORT: '34123'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reproducible artifact
+        run: python3 scripts/build_release.py
+      - name: Database bootstrap and contract/security regression
+        run: bun run qualification/isolated-gate.ts
+      - name: MAX03 steady 30-minute sustained load on disposable Postgres
+        run: bun run qualification/max03-load-gate.ts

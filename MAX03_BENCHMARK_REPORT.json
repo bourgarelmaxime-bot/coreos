@@ -1,0 +1,88 @@
+{
+  "schema": "MAX03_BENCHMARK_V1",
+  "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472",
+  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
+  "environment": "GitHub-hosted ubuntu-latest + PG17 disposable",
+  "workload": {
+    "per_stage": 96,
+    "concurrency": [
+      1,
+      4,
+      16
+    ]
+  },
+  "stages": [
+    {
+      "concurrency": 1,
+      "n": 96,
+      "p50_ms": 2.132506,
+      "p95_ms": 6.173982,
+      "p99_ms": 10.381427,
+      "throughput_req_s": 379.08836,
+      "errors": 0
+    },
+    {
+      "concurrency": 4,
+      "n": 96,
+      "p50_ms": 4.483745,
+      "p95_ms": 6.245222,
+      "p99_ms": 8.334868,
+      "throughput_req_s": 851.03729,
+      "errors": 0
+    },
+    {
+      "concurrency": 16,
+      "n": 96,
+      "p50_ms": 17.95691099999999,
+      "p95_ms": 21.888222999999925,
+      "p99_ms": 23.514583000000016,
+      "wall_ms": 114.41691500000002,
+      "throughput_req_s": 839.0367805319693,
+      "errors": 0
+    }
+  ],
+  "large_dag_1024_ms": 19.180558,
+  "near_max_body_http": 201,
+  "over_max_body_http": 413,
+  "audit_forks": 0,
+  "short_load_gate": "PASS",
+  "sustained_1800s_gate": "RUNNING_UNVERIFIED",
+  "sustained_run_url": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104",
+  "measurement_limitations": [
+    "Small local burst only; 96 samples per stage",
+    "No cross-machine latency or cloud network realism",
+    "CPU/RSS/DB connection metrics not obtained",
+    "No baseline-to-candidate paired environment comparison",
+    "No confidence interval on observed latency"
+  ],
+  "claim": "No sustained throughput guarantee",
+  "hosted": {
+    "environment": "Railway isolated 0.25 vCPU / Neon PostgreSQL17, private service, no public domain",
+    "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+    "deployments": [
+      {
+        "id": "333b7a2b-8ad7-42b0-934f-ecbc4d16c10a",
+        "n": 96,
+        "concurrency": 16,
+        "p95_ms": 701.5377399999998,
+        "p99_ms": 725.6332879999991,
+        "throughput_req_s": 23.219947066502556,
+        "hosted_gate": "PASS"
+      },
+      {
+        "id": "92497d43-e0db-4227-aecd-f6b62b68cf4e",
+        "n": 96,
+        "concurrency": 16,
+        "p95_ms": 692.8023209999992,
+        "hosted_gate": "PASS"
+      }
+    ],
+    "kill_switch": true,
+    "external_mutations": 0,
+    "limitations": [
+      "Short local loop within host; not public-network benchmarking",
+      "No formal CPU/RSS/DB connection utilization analysis"
+    ]
+  }
+}

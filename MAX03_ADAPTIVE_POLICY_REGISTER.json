@@ -1,0 +1,43 @@
+{
+  "code_location": "PR #3 / src/adaptive-orchestrator.ts",
+  "synthetic_only": true,
+  "strategies": [
+    "fixed",
+    "first_fit",
+    "least_cost",
+    "least_latency",
+    "pareto",
+    "adaptive"
+  ],
+  "policy_states": [
+    "CANDIDATE",
+    "OFFLINE_QUALIFIED",
+    "SHADOW_QUALIFIED",
+    "ISOLATED_CANARY",
+    "QUALIFIED",
+    "ACTIVE",
+    "RETIRED"
+  ],
+  "runtime_activated": false,
+  "production_authority": false,
+  "empirical_evidence": "MAX03_EXPERIMENT_REGISTER.json",
+  "current_verdict": "CANDIDATE_ONLY",
+  "notes": [
+    "No persistent policy store",
+    "No cross-instance scheduler",
+    "User confirmation/production gate required before ACTIVE"
+  ],
+  "durable_candidate_registry": {
+    "source_pr": 3,
+    "migration": "005_max03_learning_registry.sql",
+    "schema": "coreos_product.orchestration_policy_candidates",
+    "qualified_isolated": true,
+    "active": false,
+    "observations_schema": "coreos_product.orchestration_outcomes",
+    "limits": [
+      "Only synthetic input source",
+      "No automated live policy activation",
+      "No independent causal evaluation"
+    ]
+  }
+}

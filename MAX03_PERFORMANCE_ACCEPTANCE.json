@@ -1,0 +1,43 @@
+{
+  "schema": "COREOS_MAX03_PERFORMANCE_ACCEPTANCE_V1",
+  "status": "PRE_REGISTERED_BEFORE_MAX03_LOAD_RUN",
+  "test_environment": "GitHub Actions ubuntu-latest, PostgreSQL17 disposable",
+  "workload": {
+    "small_request_count_per_stage": 96,
+    "concurrency_levels": [
+      1,
+      4,
+      16
+    ],
+    "large_dag_nodes": 1024,
+    "large_body_target_bytes": 1044480,
+    "above_limit_bytes": 1060000
+  },
+  "security_zero_tolerance": {
+    "unauthorized_mutations": 0,
+    "audit_forks": 0,
+    "orphan_requests": 0,
+    "data_loss": 0
+  },
+  "thresholds": {
+    "normal_success_rate": 1,
+    "p95_ms_concurrency16_max": 3000,
+    "p99_ms_concurrency16_max": 5000,
+    "throughput_concurrency16_min_req_s": 5,
+    "large_dag_plan_ms_max": 5000,
+    "near_max_body_success_status": 201,
+    "over_max_body_reject_status": 413
+  },
+  "sustain": {
+    "target_seconds": 1800,
+    "steady_state_rate_per_second": 1,
+    "errors_allowed": 0,
+    "final_audit_forks_allowed": 0,
+    "qualification": "PENDING_30_MINUTE_EXECUTION"
+  },
+  "notes": [
+    "Pre-registered thresholds are guardrails, not assertions of demonstrated performance.",
+    "No performance improvement is assumed a priori.",
+    "A single GitHub CI job cannot prove multi-replica safety."
+  ]
+}
