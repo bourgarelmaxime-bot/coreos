@@ -13,7 +13,7 @@
 - Cancellation/start course contrôlée, version rouge [41780580923](https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41780580923), puis verte après verrouillage transactionnel.
 - Kill-switch en vol : API HTTP 423 et exécution/requête `CANCELLED` après réengagement, aucun effet externe.
 - Indisponibilité PostgreSQL en CI : conteneur suspendu, readiness fail-closed, retour de connexion, idempotence préservée ; [41781041386](https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41781041386).
-- Hébergement isolé Railway : [a2599fd3](https://railway.app) première qualification, [db35f5d4](https://railway.app) rollback RC5, [cd7f5bb3](https://railway.app) rollforward ; états vérifiés via outils Railway/Neon. Aucun lien de déploiement public n'est prétendu.
+- Hébergement isolé Railway : `a2599fd3-ac3c-45f0-9cd1-b68b33f164de` première qualification, `db35f5d4-700c-44ed-bf70-4574533d3645` rollback RC5, `cd7f5bb3-87d8-4a22-af4f-4831a8800f9d` rollforward ; états vérifiés via outils Railway/Neon. Aucun lien de déploiement public n'est prétendu.
 - Repro CodeQL : runtime assemblé depuis quatre parties ; 0 finding et 0 erreur d'extraction, SARIF archivé. **Ne satisfait pas à lui seul l'audit humain indépendant**.
 - Test exact de 30 min : [41782036482](https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41782036482), **en cours** lors de la rédaction ; aucune conclusion anticipée.
 
