@@ -1,0 +1,70 @@
+{
+  "version": "MAX03_ARCH_V0",
+  "layers": [
+    {
+      "name": "contract",
+      "components": [
+        "COREOS_INTEGRATION_CONTRACT_V1",
+        "COREOS_CAPABILITY_GRAPH_PLANNER_V1"
+      ],
+      "status": "IMPLEMENTED"
+    },
+    {
+      "name": "state",
+      "components": [
+        "PostgreSQL requests/executions/evidence/audit/idempotency",
+        "transactional idempotency in PR2"
+      ],
+      "status": "IMPLEMENTED_A_HARDENING_BRANCH"
+    },
+    {
+      "name": "safety",
+      "components": [
+        "tenant isolation",
+        "scopes",
+        "kill-switch",
+        "global audit chain lock",
+        "CAS execution start"
+      ],
+      "status": "PASS_CI_SCOPED"
+    },
+    {
+      "name": "adaptive_synthetic",
+      "components": [
+        "provider eligibility",
+        "bounded failover",
+        "in-process capacity",
+        "verified synthetic observations"
+      ],
+      "status": "IMPLEMENTED_PR3_NOT_MERGED"
+    },
+    {
+      "name": "learning",
+      "components": [
+        "versioned registry",
+        "observation ranking",
+        "candidate proposal"
+      ],
+      "status": "PARTIAL_IN_MEMORY_PR3"
+    },
+    {
+      "name": "production",
+      "components": [
+        "OIDC/mTLS",
+        "distributed resource admission",
+        "attested providers",
+        "independent audit",
+        "policy human gate"
+      ],
+      "status": "ABSENT_OR_UNVERIFIED"
+    }
+  ],
+  "critical_path": [
+    "PR2 race correctness",
+    "30m soak",
+    "independent review",
+    "current rollback",
+    "stacked PR3 eligibility",
+    "safe production pilot"
+  ]
+}

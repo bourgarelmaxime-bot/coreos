@@ -1,0 +1,30 @@
+{
+  "code_location": "PR #3 / src/adaptive-orchestrator.ts",
+  "synthetic_only": true,
+  "strategies": [
+    "fixed",
+    "first_fit",
+    "least_cost",
+    "least_latency",
+    "pareto",
+    "adaptive"
+  ],
+  "policy_states": [
+    "CANDIDATE",
+    "OFFLINE_QUALIFIED",
+    "SHADOW_QUALIFIED",
+    "ISOLATED_CANARY",
+    "QUALIFIED",
+    "ACTIVE",
+    "RETIRED"
+  ],
+  "runtime_activated": false,
+  "production_authority": false,
+  "empirical_evidence": "MAX03_EXPERIMENT_REGISTER.json",
+  "current_verdict": "CANDIDATE_ONLY",
+  "notes": [
+    "No persistent policy store",
+    "No cross-instance scheduler",
+    "User confirmation/production gate required before ACTIVE"
+  ]
+}

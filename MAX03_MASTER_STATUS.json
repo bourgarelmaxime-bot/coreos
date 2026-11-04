@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-04",
+  "overall_status": "ACTIVE_GOVERNED_EXECUTION",
+  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "pr1": 1,
+  "pr2": 2,
+  "pr3": 3,
+  "verified": {
+    "concurrent_same_key_single_request": true,
+    "concurrent_execution_start_single_winner": true,
+    "audit_forks": 0,
+    "unit_and_36_http_pass": true,
+    "short_load_pass": true,
+    "near_max_request_pass": true
+  },
+  "active": {
+    "soak_run": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104",
+    "independent_review": "UNAVAILABLE_CURRENT_CONTEXT",
+    "rollback_current_head": "PENDING",
+    "adaptive_synthetic": "PR3_TESTED",
+    "governed_learning": "CANDIDATE_ONLY"
+  },
+  "artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
+  "runtime_sha256": "0be6821790ea614254dd7582b6f06ce4b9fd283d36b434c37afb63e735398b18",
+  "planner_sha256": "d16a946b9ae018bebef8c4358d1ce994a376772344ce90312dcf38f4917ac5cc",
+  "release_eligible": false,
+  "merge_eligible": false
+}

@@ -1,0 +1,84 @@
+{
+  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "tests": [
+    {
+      "id": "A-CON-01",
+      "name": "24 concurrent same-key idempotency",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-CON-02",
+      "name": "12 concurrent same-execution start",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SEC-01",
+      "name": "audit chain fork under concurrent writes",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SEC-02",
+      "name": "malformed kill-switch payload",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-HTTP-01",
+      "name": "historical 36 HTTP security and contracts",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-PERF-01",
+      "name": "96 requests at concurrency 1/4/16",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-PERF-02",
+      "name": "1024-node DAG, near and over 1MiB",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "A-SOAK-01",
+      "name": "1800s sustained write workload",
+      "result": "RUNNING_UNVERIFIED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104"
+    },
+    {
+      "id": "A-FAIL-01",
+      "name": "database outage/reconnection, cancellation racing execution",
+      "result": "PENDING"
+    },
+    {
+      "id": "A-SEC-03",
+      "name": "independent code security review",
+      "result": "PENDING"
+    },
+    {
+      "id": "A-RELEASE-01",
+      "name": "current hardening artifact rollback on Railway",
+      "result": "PENDING"
+    },
+    {
+      "id": "B-UNIT-01",
+      "name": "synthetic adaptive engine 12 unit/paired scenarios",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769452579"
+    },
+    {
+      "id": "B-INT-01",
+      "name": "HTTP synthetic adapter boundary",
+      "result": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "C-VAL-01",
+      "name": "temporal holdout, shadow vs promoted learning with confidence",
+      "result": "NOT_IMPLEMENTED"
+    }
+  ]
+}

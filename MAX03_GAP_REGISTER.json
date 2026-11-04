@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-04",
+  "items": [
+    {
+      "id": "G-A-01",
+      "capability": "concurrent idempotency",
+      "initial": "PARTIAL",
+      "current": "IMPLEMENTED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472",
+      "notes": "24 same-key simultaneous requests -> one request after fix"
+    },
+    {
+      "id": "G-A-02",
+      "capability": "single-winner execution start",
+      "initial": "PARTIAL",
+      "current": "IMPLEMENTED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472",
+      "notes": "12 concurrent start attempts -> one winner"
+    },
+    {
+      "id": "G-A-03",
+      "capability": "global audit chain under contention",
+      "initial": "PARTIAL",
+      "current": "IMPLEMENTED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472",
+      "notes": "database-wide transaction advisory lock; zero forks observed"
+    },
+    {
+      "id": "G-A-04",
+      "capability": "short-load and payload limits",
+      "initial": "ABSENT",
+      "current": "IMPLEMENTED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472"
+    },
+    {
+      "id": "G-A-05",
+      "capability": "30-minute sustained soak",
+      "initial": "ABSENT",
+      "current": "UNVERIFIED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104"
+    },
+    {
+      "id": "G-A-06",
+      "capability": "independent adversarial review",
+      "initial": "ABSENT",
+      "current": "UNVERIFIED",
+      "notes": "Only author self-review; no independent reviewer invoked"
+    },
+    {
+      "id": "G-A-07",
+      "capability": "current security hardening hosted rollback",
+      "initial": "ABSENT",
+      "current": "UNVERIFIED",
+      "notes": "Prior RC1 rollback does not qualify PR2 SHA"
+    },
+    {
+      "id": "G-B-01",
+      "capability": "generic synthetic adapter execution",
+      "initial": "ABSENT",
+      "current": "IMPLEMENTED",
+      "location": "PR #3"
+    },
+    {
+      "id": "G-B-02",
+      "capability": "distributed fair scheduler with queue",
+      "initial": "ABSENT",
+      "current": "ABSENT"
+    },
+    {
+      "id": "G-B-03",
+      "capability": "provider attestation and real adapter",
+      "initial": "ABSENT",
+      "current": "ABSENT"
+    },
+    {
+      "id": "G-C-01",
+      "capability": "verified outcome registry in-memory",
+      "initial": "ABSENT",
+      "current": "IMPLEMENTED",
+      "location": "PR #3"
+    },
+    {
+      "id": "G-C-02",
+      "capability": "durable tenant-isolated outcome storage and temporal holdout",
+      "initial": "ABSENT",
+      "current": "ABSENT"
+    },
+    {
+      "id": "G-C-03",
+      "capability": "authorized isolated canary and policy promotion",
+      "initial": "ABSENT",
+      "current": "PARTIAL",
+      "location": "PR #3",
+      "notes": "State transitions exist; proof of canary promotion and production authority missing"
+    }
+  ]
+}
