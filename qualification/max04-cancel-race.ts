@@ -54,9 +54,30 @@ async function main(){
  invariant(states[0].request_status==='CANCELLED','cancel_not_overwritten_request');
  invariant(states[0].execution_status==='CANCELLED','cancel_not_overwritten_execution');
  invariant(!evidence.some((x:any)=>x.type==='EXECUTION_SUCCEEDED'),'no_postcancel_success_evidence');
+ const killedFixture=await api('/v1/requests','POST',{
+   ...payload,objective:'MAX04_KILL_IN_FLIGHT_'+randomUUID()
+ });
+ invariant(killedFixture.status===201,'kill_fixture_created');
+ const killedId=killedFixture.data.execution_id,killedRequestId=killedFixture.data.request_id;
+ const killedStart=api('/v1/executions/'+killedId+'/start','POST',{});
+ let killRunning=false;
+ for(let i=0;i<80;i++){
+   const row=await db`select status from coreos_product.executions where execution_id=${killedId}`;
+   if(row[0]?.status==='RUNNING'){killRunning=true;break;}
+   await Bun.sleep(15);
+ }
+ invariant(killRunning,'kill_fixture_entered_running');
+ await db`update coreos_product.controls set kill_switch=true,updated_at=now() where id=1`;
+ const killedReply=await killedStart;
+ const afterKill=await db`select (select status from coreos_product.requests where request_id=${killedRequestId}) as request_status,(select status from coreos_product.executions where execution_id=${killedId}) as execution_status`;
+ console.log(JSON.stringify({event:'MAX04_KILL_IN_FLIGHT',start_http:killedReply.status,
+   request_status:afterKill[0]?.request_status,execution_status:afterKill[0]?.execution_status}));
+ invariant(killedReply.status===423,'kill_in_flight_rejected');
+ invariant(afterKill[0]?.request_status==='CANCELLED'&&afterKill[0]?.execution_status==='CANCELLED','kill_wins_state');
  const control=await db`select kill_switch from coreos_product.controls where id=1`;
- invariant(control[0]?.kill_switch===false,'control_stable_during_fixture');
- console.log(JSON.stringify({event:'MAX04_CANCEL_RACE_GATE',verdict:'PASS',cancel_wins:true,external_mutations:0,execution_id:id}));
+ invariant(control[0]?.kill_switch===true,'kill_switch_remains_on');
+ console.log(JSON.stringify({event:'MAX04_CANCEL_RACE_GATE',verdict:'PASS',cancel_wins:true,
+    kill_in_flight:true,external_mutations:0,execution_id:id}));
 }
 try{await main();}catch(e:any){
  console.error(JSON.stringify({event:'MAX04_CANCEL_RACE_GATE',verdict:'FAIL',error:String(e)}));process.exitCode=1;
