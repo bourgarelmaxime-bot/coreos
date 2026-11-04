@@ -40,7 +40,12 @@ async function startExecution(id:string,ctx:any){
   const exe=await readExecution(id);if(!exe)return{error:'NOT_FOUND',status:404};if(exe.app_id!==ctx.app_id)return{error:'FORBIDDEN',status:403};if(exe.status!=='PLANNED')return{error:'INVALID_STATE',status:409};
   const controls=await getControls();if(controls.kill_switch)return{error:'KILL_SWITCH_ENGAGED',status:423};if(controls.paused)return{error:'RUNTIME_PAUSED',status:423};
   const req=await readRequest(exe.request_id);if(!req)return{error:'NOT_FOUND',status:404};if(req.authority.mode==='recommendation')return{error:'AUTHORITY_FORBIDS_EXECUTION',status:403};
-  exe.status='RUNNING';exe.started_at=nowIso();req.status='RUNNING';await saveExecution(exe);await saveRequest(req);
+  // A single DB compare-and-set owns this transition, including a final control check.
+  // Concurrent callers must not trigger duplicate effects/evidence.
+  exe.status='RUNNING';exe.started_at=nowIso();
+  const claimed=await db`update coreos_product.executions set status='RUNNING',payload=${exe},updated_at=now() where execution_id=${id} and status='PLANNED' and exists (select 1 from coreos_product.controls where id=1 and kill_switch=false and paused=false) returning execution_id`;
+  if(claimed.length!==1)return{error:'INVALID_STATE',status:409};
+  req.status='RUNNING';await saveRequest(req);
   const started=evidenceEvent({appId:ctx.app_id,requestId:req.request_id,executionId:id,traceId:exe.trace_id,type:'EXECUTION_STARTED',observed:{kill_switch:false},decision:'EXECUTE',reason:'AUTHORIZED_BOUNDED_EXECUTION',action:{adapter:'coreos.noop'},effect:{mutated_external:false},cost:{actual:0}});await appendEvidence(id,started);await appendAudit(started);
   const wf=req.constraints?.adaptive_workflow;
   if(wf && Array.isArray(wf.levels) && Array.isArray(wf.observations)){
