@@ -1,0 +1,12 @@
+{
+  "qualified_prior_baseline": {
+    "source_sha": "d6780bf612c57998eae999a6bd4ad104f5ff1948",
+    "history": "RC1 -> RC5 -> RC1 PASS",
+    "receipt": "ROLLBACK_RECEIPT.json"
+  },
+  "current_max03_head": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "validated_ci_artifact_sha256": "e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8",
+  "roll_back_current_head_qualified": false,
+  "reason": "No Railway/Neon rollback has yet been executed on the updated MAX03 transactional/CAS code; historical proof cannot transfer.",
+  "production_rollback_authorized": false
+}

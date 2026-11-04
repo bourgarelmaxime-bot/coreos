@@ -1,0 +1,47 @@
+{
+  "project": "CORE OS",
+  "date": "2026-11-04",
+  "repository": "bourgarelmaxime-bot/coreos",
+  "main_sha": "378003ad23d7902f988edc52dee327917121c5c6",
+  "baseline_release": "1.1.0-rc.5",
+  "pr1": {
+    "number": 1,
+    "head_sha": "4810e944e25c6673dcd5724db13b75cc859cf8cf",
+    "state": "DRAFT",
+    "qualification": "36_HTTP_CI_AND_RAILWAY_PRIOR_PASS",
+    "gate_E14": "BLOCKED"
+  },
+  "pr2": {
+    "number": 2,
+    "branch": "max03/a-concurrency-hardening",
+    "engineering_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+    "state": "DRAFT",
+    "base": "feat/1.2-capability-graph-planner"
+  },
+  "pr3": {
+    "number": 3,
+    "branch": "max03/bc-synthetic-adaptive-engine",
+    "source_sha": "3cc6623d8733ee1db6e5ca410be973df49cad10a",
+    "base": "max03/a-concurrency-hardening",
+    "state": "DRAFT"
+  },
+  "isolated_resources": {
+    "railway_project": "5fca3e49-f0f3-4991-b284-5d1e3e9744ef",
+    "railway_environment": "25be38ce-0917-4dab-9160-c846148bbcc2",
+    "railway_status": "SLEEPING",
+    "neon_project": "autumn-block-76700490",
+    "neon_pg_version": 17
+  },
+  "existing_features": {
+    "capability_graph": "IMPLEMENTED",
+    "graph_planner": "IMPLEMENTED",
+    "synthetic_noop_execution": "IMPLEMENTED",
+    "hmac_auth": "IMPLEMENTED",
+    "idempotency": "IMPLEMENTED_HARDENED_IN_PR2_ONLY",
+    "audit_chain": "IMPLEMENTED_HARDENED_IN_PR2_ONLY",
+    "bounded_provider_selection": "IMPLEMENTED_SYNTHETIC_PR3_ONLY",
+    "historical_learning": "PARTIAL_SYNTHETIC_IN_MEMORY_PR3",
+    "real_external_adapter": "ABSENT"
+  },
+  "source_policies": "Current GitHub state outranks historical status."
+}

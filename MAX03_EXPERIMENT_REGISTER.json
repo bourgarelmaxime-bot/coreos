@@ -1,0 +1,26 @@
+{
+  "experiments": [
+    {
+      "id": "MAX03-SYNTHETIC-PAIRED-12",
+      "status": "EXPLORATORY_SYNTHETIC_PASS",
+      "repository_pr": 3,
+      "ci": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769452579",
+      "design": "12 paired deterministic scripted failure workloads",
+      "baseline": "first_fit",
+      "candidate": "adaptive",
+      "baseline_successes": 12,
+      "candidate_successes": 12,
+      "baseline_declared_cost": 36,
+      "candidate_declared_cost": 26,
+      "relative_declared_cost_reduction": 0.2777777777777778,
+      "provenance": "SYNTHETIC_FAULT_SCRIPT",
+      "limitations": [
+        "Scripted non-random provider failure",
+        "No confidence intervals or out-of-sample holdout",
+        "No actual financial cost measured",
+        "Observational feedback is in-memory, not durable"
+      ],
+      "value_verdict": "VALUE_UNPROVEN_FOR_REAL_ORCHESTRATION"
+    }
+  ]
+}

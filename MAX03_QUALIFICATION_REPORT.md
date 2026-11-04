@@ -1,0 +1,28 @@
+# CORE OS MAX-03 — Qualification et état réel
+
+## Évidence observée
+
+- Base de référence : RC5 sur `main`, PR #1 sur 1.2, PR #2 hardening, PR #3 moteur synthétique.
+- Tests de concurrence initialement rouges, puis verts sur https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769851472.
+- Idempotence : 24 soumissions identiques simultanées → une requête persistée.
+- Claim d'exécution : 12 démarrages simultanés → un STARTED.
+- 36 tests d'intégration hérités réussis.
+- Charge courte : 96 requêtes par palier, concurrence 1 / 4 / 16, sans erreur ; p95 à concurrence 16 : 21,89 ms ; p99 : 23,51 ms ; débit observé sur la courte rafale : 839 req/s. Ces chiffres ne caractérisent pas un débit soutenu ni la production.
+- Graphe de 1 024 noeuds : 19,18 ms ; acceptation en-dessous de 1 Mio et refus au-dessus.
+- Artefact exact de la PR #2 : `e2fa5618bdf4d1325ff4fff23f83a1e49a413044fb4366c368e107d7dd18b5d8` ; runtime : `0be6821790ea614254dd7582b6f06ce4b9fd283d36b434c37afb63e735398b18` ; planner : `d16a946b9ae018bebef8c4358d1ce994a376772344ce90312dcf38f4917ac5cc`.
+- Soak 30 min : en cours / non encore qualifié, voir https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41769871104.
+- PR #3 : 12 scénarios de tests sur moteur de sélection synthétique, avec un exercice apparié de 12 tâches, coût déclaré 36 → 26, taux de succès constant 12/12 ; valeur hors simulation non prouvée.
+
+## Ce qui n'est pas démontré
+
+Audit indépendant, résilience sous panne de base, charge prolongée achevée, forte concurrence multi-réplicas, rollback de l'artefact hardené, queue équitable, intégration d'un vrai provider externe, conservation durable des résultats d'apprentissage, amélioration causale hors échantillon.
+
+## Verdicts
+
+- Phase A : **CONDITIONAL PASS — QUALIFIED WITH BLOCKERS**.
+- Phase B : **CONDITIONAL PASS — QUALIFIED WITH BLOCKERS** (moteur synthétique isolé, pas une intégration production).
+- Phase C : **CONDITIONAL PASS — QUALIFIED WITH BLOCKERS** (observations influençant l'exécution dans une mémoire locale, pas une boucle qualifiée en production).
+- Valeur d'optimisation réelle : **VALUE UNPROVEN**.
+- E14 / merge / release : **BLOCKED**.
+
+Voir les registres JSON MAX03 pour les identifiants et les contrôles.

@@ -1,0 +1,97 @@
+{
+  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "method": "ANI PARETO dependency graph",
+  "nodes": [
+    {
+      "id": "A-SAFETY",
+      "centrality": "CRITICAL",
+      "status": "PASS_ISOLATED",
+      "depends_on": []
+    },
+    {
+      "id": "A-LOAD",
+      "centrality": "HIGH",
+      "status": "PASS_SHORT_LOAD",
+      "depends_on": [
+        "A-SAFETY"
+      ]
+    },
+    {
+      "id": "A-SOAK",
+      "centrality": "CRITICAL",
+      "status": "RUNNING_UNVERIFIED",
+      "depends_on": [
+        "A-LOAD"
+      ]
+    },
+    {
+      "id": "A-INDEPENDENT_REVIEW",
+      "centrality": "CRITICAL",
+      "status": "NOT_PERFORMED",
+      "depends_on": [
+        "A-SAFETY"
+      ]
+    },
+    {
+      "id": "A-ROLLBACK",
+      "centrality": "CRITICAL",
+      "status": "NOT_VERIFIED_CURRENT_SHA",
+      "depends_on": [
+        "A-SAFETY"
+      ]
+    },
+    {
+      "id": "B-SYNTHETIC",
+      "centrality": "HIGH",
+      "status": "IMPLEMENTED_IN_PR3",
+      "depends_on": [
+        "A-SAFETY"
+      ]
+    },
+    {
+      "id": "B-ADMISSION_FAIRNESS",
+      "centrality": "HIGH",
+      "status": "ABSENT",
+      "depends_on": [
+        "B-SYNTHETIC"
+      ]
+    },
+    {
+      "id": "C-OBSERVATIONS",
+      "centrality": "HIGH",
+      "status": "IN_MEMORY_PR3",
+      "depends_on": [
+        "B-SYNTHETIC"
+      ]
+    },
+    {
+      "id": "C-LEARNING",
+      "centrality": "HIGH",
+      "status": "EXPLORATORY_SYNTHETIC",
+      "depends_on": [
+        "C-OBSERVATIONS"
+      ]
+    },
+    {
+      "id": "C-PROMOTION",
+      "centrality": "CRITICAL",
+      "status": "NOT_QUALIFIED",
+      "depends_on": [
+        "C-LEARNING",
+        "A-INDEPENDENT_REVIEW"
+      ]
+    },
+    {
+      "id": "RELEASE",
+      "centrality": "CRITICAL",
+      "status": "BLOCKED",
+      "depends_on": [
+        "A-SOAK",
+        "A-INDEPENDENT_REVIEW",
+        "A-ROLLBACK"
+      ]
+    }
+  ],
+  "pareto_decision": "Fix correctness before extending optimizer; retain simple strategies unless paired evidence supports improvement",
+  "physarum": "OPTIONAL_HYPOTHESIS_NOT_IMPLEMENTED"
+}
