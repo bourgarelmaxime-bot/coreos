@@ -1,5 +1,5 @@
 {
-  "source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
   "tests": [
     {
       "id": "A-CON-01",
@@ -79,6 +79,30 @@
       "id": "C-VAL-01",
       "name": "temporal holdout, shadow vs promoted learning with confidence",
       "result": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "A-HOST-01",
+      "name": "MAX03 HTTP concurrency and short load on isolated Railway/Neon",
+      "result": "PASS",
+      "evidence": "Railway deployment 333b7a2b-8ad7-42b0-934f-ecbc4d16c10a"
+    },
+    {
+      "id": "A-HOST-02",
+      "name": "hardened RC1 -> RC5 -> hardened RC1 rollback with same persisted fixture",
+      "result": "PASS",
+      "evidence": "MAX03_ROLLBACK_RECEIPT.json"
+    },
+    {
+      "id": "B-GRAPH-01",
+      "name": "graph-to-synthetic-adapter dependency execution and evidence",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174"
+    },
+    {
+      "id": "C-STORE-01",
+      "name": "durable 10-outcome PG registry, tenant isolation, as-of cutoff, append-only",
+      "result": "PASS_ISOLATED",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174"
     }
   ]
 }

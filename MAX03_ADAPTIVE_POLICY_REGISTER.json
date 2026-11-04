@@ -26,5 +26,18 @@
     "No persistent policy store",
     "No cross-instance scheduler",
     "User confirmation/production gate required before ACTIVE"
-  ]
+  ],
+  "durable_candidate_registry": {
+    "source_pr": 3,
+    "migration": "005_max03_learning_registry.sql",
+    "schema": "coreos_product.orchestration_policy_candidates",
+    "qualified_isolated": true,
+    "active": false,
+    "observations_schema": "coreos_product.orchestration_outcomes",
+    "limits": [
+      "Only synthetic input source",
+      "No automated live policy activation",
+      "No independent causal evaluation"
+    ]
+  }
 }

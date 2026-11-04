@@ -56,5 +56,33 @@
     "No baseline-to-candidate paired environment comparison",
     "No confidence interval on observed latency"
   ],
-  "claim": "No sustained throughput guarantee"
+  "claim": "No sustained throughput guarantee",
+  "hosted": {
+    "environment": "Railway isolated 0.25 vCPU / Neon PostgreSQL17, private service, no public domain",
+    "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+    "deployments": [
+      {
+        "id": "333b7a2b-8ad7-42b0-934f-ecbc4d16c10a",
+        "n": 96,
+        "concurrency": 16,
+        "p95_ms": 701.5377399999998,
+        "p99_ms": 725.6332879999991,
+        "throughput_req_s": 23.219947066502556,
+        "hosted_gate": "PASS"
+      },
+      {
+        "id": "92497d43-e0db-4227-aecd-f6b62b68cf4e",
+        "n": 96,
+        "concurrency": 16,
+        "p95_ms": 692.8023209999992,
+        "hosted_gate": "PASS"
+      }
+    ],
+    "kill_switch": true,
+    "external_mutations": 0,
+    "limitations": [
+      "Short local loop within host; not public-network benchmarking",
+      "No formal CPU/RSS/DB connection utilization analysis"
+    ]
+  }
 }

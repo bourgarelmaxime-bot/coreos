@@ -26,3 +26,15 @@ Audit indépendant, résilience sous panne de base, charge prolongée achevée, 
 - E14 / merge / release : **BLOCKED**.
 
 Voir les registres JSON MAX03 pour les identifiants et les contrôles.
+
+## MAX-03 hébergé / rollback du code durci
+
+L'environnement Railway et Neon isolé a passé trois suites (36 HTTP historiques, concurrence/adversarial, charge courte) sur le code durci `a799d5b7…`. P95 à concurrence 16 : 701,54 ms pour 96 requêtes ; débit court 23,22 req/s, sans erreur, seuil préenregistré respecté. Déploiement `333b7a2b-8ad7-42b0-934f-ecbc4d16c10a` PASS.
+
+Rollback `a799d5…` → RC5 `378003…` → `a799d5…` PASS : déploiements `333b7a2b` → `9f2d34dd` → `92497d43`. La fixture d'exécution `1f510721-0d30-43fe-8034-3ebf1ff9e6c2` est restée SUCCEEDED avec 2 preuves, kill switch actif, aucun effet externe. Voir `MAX03_ROLLBACK_RECEIPT.json`.
+
+## Phase C : registre durable (expérimental)
+
+Dans PR #3, migration 005, 10 résultats synthétiques persistent dans Postgres jetable. Tests d'isolation tenant, verrou append-only, lecture sans fuite de futur et promotion ACTIVE bloquée PASS. Le graphe planifié est réellement parcouru par les adaptateurs synthétiques. Pas d'exécution provider réel, pas de déploiement production, aucune preuve de gain causal généralisable.
+
+L'audit indépendant E14 et le résultat du soak 30min restent PENDING ; pas de merge/release.
