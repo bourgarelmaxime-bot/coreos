@@ -1,3 +1,11 @@
+function decide(levels:number[],cur:number,o:any,deadline:number){
+  const idx=levels.indexOf(cur); const rate=Math.max(.001,Number(o.observed_service_rate)||.001); const projected=(Number(o.oldest_age_s)||0)+(Number(o.backlog)||0)/rate;
+  const lowerProjected=idx>0&&Number(o.lower_service_rate)>0?(Number(o.recent_demand)||0)/Number(o.lower_service_rate):Infinity;
+  if(Number(o.backlog)>0 && projected>deadline && idx<levels.length-1) return {decision:'SCALE_UP',reason:'GENERIC_CAPACITY_DEFICIT',from_level:cur,to_level:levels[idx+1],observation:{...o,projected_completion_s:projected,lower_projected_s:Number.isFinite(lowerProjected)?lowerProjected:null,deadline_s:deadline}};
+  if(Number(o.backlog)===0 && idx>0 && lowerProjected<=deadline) return {decision:'SCALE_DOWN',reason:'LOWER_CAPACITY_SUFFICIENT',from_level:cur,to_level:levels[idx-1],observation:{...o,projected_completion_s:projected,lower_projected_s:lowerProjected,deadline_s:deadline}};
+  return {decision:'HOLD',reason:'CAPACITY_SUFFICIENT',from_level:cur,to_level:cur,observation:{...o,projected_completion_s:projected,lower_projected_s:Number.isFinite(lowerProjected)?lowerProjected:null,deadline_s:deadline}};
+}
+
 async function readRequest(id:string){const r=await db`select payload from coreos_product.requests where request_id=${id}`;return r[0]?.payload||null;}
 async function readExecution(id:string){const r=await db`select payload from coreos_product.executions where execution_id=${id}`;return r[0]?.payload||null;}
 async function saveRequest(v:any,client:any=db){await client`insert into coreos_product.requests(request_id,execution_id,app_id,status,payload,created_at,updated_at) values(${v.request_id},${v.execution_id},${v.app_id},${v.status},${v},${v.created_at},now()) on conflict(request_id) do update set status=excluded.status,payload=excluded.payload,updated_at=now()`;}
