@@ -48,6 +48,20 @@ async function main(){
  invariant(near.status===201,'near_max_accepted');
  const over=await call(work('above-limit','x'.repeat(1060000)));
  invariant(over.status===413,'above_max_rejected');
+ // An absent Content-Length (HTTP chunked transfer) must NOT bypass the 1 MiB admission cap.
+ const streamedJSON=JSON.stringify(work('streamed-above-limit','x'.repeat(1060000)));
+ const bytes=new TextEncoder().encode(streamedJSON);let cursor=0;
+ const stream=new ReadableStream<Uint8Array>({pull(controller){
+   if(cursor>=bytes.length){controller.close();return;}
+   const next=Math.min(cursor+16384,bytes.length);
+   controller.enqueue(bytes.subarray(cursor,next));cursor=next;
+ }});
+ const streamedResponse=await fetch(url+'/v1/requests',{
+   method:'POST',
+   headers:{authorization:auth,'content-type':'application/json'},
+   body:stream,duplex:'half'
+ });
+ invariant(streamedResponse.status===413,'chunked_above_limit_rejected');
  const soakSecs=Number(Bun.env.MAX03_SOAK_SECONDS||0);
  const soak={duration_target_s:soakSecs,count:0,failed:0,actual_duration_s:0};
  if(soakSecs>0){
