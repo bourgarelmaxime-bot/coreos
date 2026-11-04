@@ -1,9 +1,53 @@
     for(const o of wf.observations){const d=decide(wf.levels,cur,o,Number(wf.deadline_s||20));const ev=evidenceEvent({appId:ctx.app_id,requestId:req.request_id,executionId:id,traceId:exe.trace_id,type:'CAPACITY_DECISION',observed:d.observation,decision:d.decision,reason:d.reason,action:{from_level:d.from_level,to_level:d.to_level},effect:{external_mutation:false},cost:{actual:0}});await appendEvidence(id,ev);await appendAudit(ev);if(d.to_level!==cur){transitions.push({from_level:cur,to_level:d.to_level,decision:d.decision});cur=d.to_level;}}
     exe.result={outcome:'BOUNDED_ADAPTIVE_REFERENCE_EXECUTION',final_level:cur,transitions,external_mutations:0};
   }else exe.result={outcome:'NOOP_REFERENCE_EXECUTION',external_mutations:0};
-  exe.status='SUCCEEDED';exe.completed_at=nowIso();req.status='SUCCEEDED';await saveExecution(exe);await saveRequest(req);return exe;
+  // State transition is serialized with concurrent cancellation under the
+  // execution row lock. Neither DONE nor RUNNING can overwrite CANCELLED.
+  return db.begin(async(tx:any)=>{
+    const owned=await tx`select status from coreos_product.executions where execution_id=${id} for update`;
+    if(owned[0]?.status==='CANCELLED')return{error:'EXECUTION_CANCELLED',status:409};
+    if(owned[0]?.status!=='RUNNING')return{error:'INVALID_STATE',status:409};
+    const control=await tx`select kill_switch,paused from coreos_product.controls where id=1`;
+    if(!control[0]||control[0].kill_switch||control[0].paused){
+      exe.status='CANCELLED';exe.completed_at=nowIso();
+      exe.result={outcome:'CONTROL_INTERRUPTED_EXECUTION',external_mutations:0};
+      req.status='CANCELLED';
+      await saveExecution(exe,tx);await saveRequest(req,tx);
+      const ev=evidenceEvent({appId:ctx.app_id,requestId:req.request_id,executionId:id,traceId:exe.trace_id,
+        type:'EXECUTION_INTERRUPTED',decision:'CANCEL',reason:'KILL_SWITCH_OR_PAUSE_ENGAGED',
+        effect:{mutated_external:false}});
+      await appendEvidence(id,ev,tx);await appendAudit(ev,tx);
+      return{error:'KILL_SWITCH_ENGAGED',status:423};
+    }
+    exe.status='SUCCEEDED';exe.completed_at=nowIso();req.status='SUCCEEDED';
+    await saveExecution(exe,tx);await saveRequest(req,tx);
+    return exe;
+  });
 }
-async function cancelRequest(id:string,ctx:any){const r=await readRequest(id);if(!r)return{error:'NOT_FOUND',status:404};if(r.app_id!==ctx.app_id)return{error:'FORBIDDEN',status:403};if(['SUCCEEDED','FAILED','CANCELLED'].includes(r.status))return{error:'INVALID_STATE',status:409};r.status='CANCELLED';await saveRequest(r);const e=await readExecution(r.execution_id);if(e){e.status='CANCELLED';e.completed_at=nowIso();await saveExecution(e);}const ev=evidenceEvent({appId:ctx.app_id,requestId:id,executionId:r.execution_id,traceId:e?.trace_id||ctx.trace_id,type:'REQUEST_CANCELLED',decision:'CANCEL',reason:'CALLER_REQUEST',effect:{external_mutations:0}});await appendEvidence(r.execution_id,ev);await appendAudit(ev);return{request_id:id,execution_id:r.execution_id,status:'CANCELLED'};}
+async function cancelRequest(id:string,ctx:any){
+  // The read outside the transaction is only for early authorization; state
+  // validation is repeated after an exclusive row lock in the transaction.
+  const prior=await readRequest(id);
+  if(!prior)return{error:'NOT_FOUND',status:404};
+  if(prior.app_id!==ctx.app_id)return{error:'FORBIDDEN',status:403};
+  return db.begin(async(tx:any)=>{
+    const rows=await tx`select status,payload from coreos_product.executions where execution_id=${prior.execution_id} for update`;
+    if(!rows.length)return{error:'NOT_FOUND',status:404};
+    if(!['PLANNED','RUNNING'].includes(rows[0].status))return{error:'INVALID_STATE',status:409};
+    const rq=await tx`select status,payload from coreos_product.requests where request_id=${id} for update`;
+    if(!rq.length)return{error:'NOT_FOUND',status:404};
+    if(!['PLANNED','RUNNING'].includes(rq[0].status))return{error:'INVALID_STATE',status:409};
+    const exe=rows[0].payload,req=rq[0].payload;
+    if(exe.app_id!==ctx.app_id||req.app_id!==ctx.app_id)return{error:'FORBIDDEN',status:403};
+    exe.status='CANCELLED';exe.completed_at=nowIso();req.status='CANCELLED';
+    await saveExecution(exe,tx);await saveRequest(req,tx);
+    const ev=evidenceEvent({appId:ctx.app_id,requestId:id,executionId:exe.execution_id,
+      traceId:exe.trace_id||ctx.trace_id,type:'REQUEST_CANCELLED',decision:'CANCEL',
+      reason:'CALLER_REQUEST',effect:{external_mutations:0}});
+    await appendEvidence(exe.execution_id,ev,tx);await appendAudit(ev,tx);
+    return{request_id:id,execution_id:exe.execution_id,status:'CANCELLED'};
+  });
+}
 async function registerProvider(body:any,ctx:any){const errors=validateProvider(body);if(errors.length)return{error:'VALIDATION_ERROR',status:400,details:errors};for(const p of body.required_permissions||[])if(!hasScope(ctx,p))return{error:'INSUFFICIENT_SCOPE',status:403};if(body.mutation_surface?.external && !hasScope(ctx,'mutation:authorize'))return{error:'UNAUTHORIZED_MUTATION',status:403};const v={...body,app_id:ctx.app_id,registered_at:nowIso()};await db`insert into coreos_product.providers(app_id,adapter_id,version,descriptor,health,updated_at) values(${ctx.app_id},${v.adapter_id},${v.version},${v},'REGISTERED',now()) on conflict(app_id,adapter_id) do update set version=excluded.version,descriptor=excluded.descriptor,health=excluded.health,updated_at=now()`;const ev={event_id:randomUUID(),ts:nowIso(),app_id:ctx.app_id,type:'PROVIDER_REGISTERED',adapter_id:v.adapter_id,version:v.version};await appendAudit(ev);return v;}
 
 async function handler(req:Request){
