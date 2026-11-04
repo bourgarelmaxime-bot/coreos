@@ -46,3 +46,13 @@ compatibility, but the standalone candidate is **not integrated into the HTTP AP
 independent evaluators; execute task-matched randomized model comparisons under a
 specifically approved spending limit; qualify the ranking on the observed data;
 complete CORE OS release gates and only then consider controlled shadow routing.
+
+## Evidence-mode separation for integration preflight
+
+The request explicitly declares `evidence_mode`:
+- `SYNTHETIC_FIXTURE`: all quality/cost/latency evidence fields must equal `SIMULATED_FIXTURE`; safe for policy-code comparisons only.
+- `VERIFIED_OBSERVATIONS`: all fields must use their actual-evidence labels; the upstream operator must independently authenticate every record and its receipt. Merely claiming those labels does **not** establish independent provenance.
+
+The CLI `qualification/p2-shadow-ranking-cli.ts` reads a single bounded JSON object on stdin, returns a deterministic, **non-actionable** decision, and does not start a server or access a model provider.
+
+The DESIGN OS P2 harness pins the exact CORE OS source SHA and exercises both ranking-policy code paths on 80 sealed synthetic tasks; this demonstrates policy behavior and safety only, not financial value. No public API changes or production activation are implied.
