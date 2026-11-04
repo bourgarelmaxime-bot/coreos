@@ -1,3 +1,4 @@
+import {assessGlobalSyntheticPolicy} from './policy-qualification.ts';
 // MAX-03: PostgreSQL evidence-backed synthetic learning registry, scoped to a caller tenant.
 // Isolated qualification only. No cross-tenant aggregation or automatic ACTIVE transition.
 import type {SQL} from 'bun';
@@ -34,9 +35,14 @@ export class SyntheticLearningStore {
   const rows=await this.db`select tenant_id,policy_id,stage,rollback_policy_id,evidence_ids from coreos_product.orchestration_policy_candidates where tenant_id=${tenantId} and policy_id=${policyId}`;
   return rows[0]||null;
  }
- async advance(tenantId:string,policyId:string,stage:PolicyStage,evidenceIds:string[]){
+ async advance(tenantId:string,policyId:string,stage:PolicyStage,evidenceIds:string[],comparativeReport?:unknown){
   if(!Array.isArray(evidenceIds)||!evidenceIds.length||evidenceIds.some(x=>!valid(x)))throw new LearningStoreError('POLICY_EVIDENCE_REQUIRED');
   const old=await this.candidate(tenantId,policyId);if(!old)throw new LearningStoreError('POLICY_UNKNOWN');
+  if(stage==='ACTIVE')throw new LearningStoreError('PRODUCTION_APPROVAL_REQUIRED');
+  if(stage==='OFFLINE_QUALIFIED'&&!assessGlobalSyntheticPolicy(comparativeReport).eligible_for_shadow_review)
+    throw new LearningStoreError('POLICY_COMPARATIVE_GATE_FAILED');
+  if(stage==='SHADOW_QUALIFIED')throw new LearningStoreError('SHADOW_EVIDENCE_REQUIRED');
+  if(stage==='ISOLATED_CANARY'||stage==='QUALIFIED')throw new LearningStoreError('ISOLATED_QUALIFICATION_EVIDENCE_REQUIRED');
   if(!next[old.stage as PolicyStage]?.includes(stage))throw new LearningStoreError('POLICY_TRANSITION_INVALID');
   if(stage==='ACTIVE')throw new LearningStoreError('PRODUCTION_APPROVAL_REQUIRED');
   const changed=await this.db`update coreos_product.orchestration_policy_candidates set stage=${stage},evidence_ids=${evidenceIds},updated_at=now() where tenant_id=${tenantId} and policy_id=${policyId} and stage=${old.stage} returning stage`;
