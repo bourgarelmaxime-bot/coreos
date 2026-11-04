@@ -1,0 +1,40 @@
+{
+  "schema": "COREOS_MAX04_ROLLBACK_RECEIPT_V1",
+  "date": "2026-11-04",
+  "result": "PASS_ISOLATED_RC1_RC5_RC1",
+  "isolated_project": "5fca3e49-f0f3-4991-b284-5d1e3e9744ef",
+  "neon_project": "autumn-block-76700490",
+  "database": "neondb",
+  "stages": [
+    {
+      "step": "before_rollback",
+      "deployment": "a2599fd3-ac3c-45f0-9cd1-b68b33f164de",
+      "git_sha": "9b531dc145262f580cd34be190bc7aaac3dd67cc",
+      "runtime_sha256": "4f7a726d914704debe1357017aa1a70c9826eb77a844d457b8dad7e8fe5bcbe4",
+      "result": "PASS_HOSTED_FOUR_STAGE"
+    },
+    {
+      "step": "rollback",
+      "deployment": "db35f5d4-700c-44ed-bf70-4574533d3645",
+      "git_sha": "378003ad23d7902f988edc52dee327917121c5c6",
+      "runtime_sha256": "580124cd5b14725bc941c341a73a774ef72f0b269ff02ee07fa119a0a99cc102",
+      "result": "SUCCESS"
+    },
+    {
+      "step": "rollforward",
+      "deployment": "cd7f5bb3-87d8-4a22-af4f-4831a8800f9d",
+      "git_sha": "9b531dc145262f580cd34be190bc7aaac3dd67cc",
+      "runtime_sha256": "4f7a726d914704debe1357017aa1a70c9826eb77a844d457b8dad7e8fe5bcbe4",
+      "result": "PASS_HOSTED_FOUR_STAGE"
+    }
+  ],
+  "persistence_verified": {
+    "fixture_execution_id": "ace6e687-84cc-40b1-9e8c-914b29bb2fcf",
+    "status": "SUCCEEDED",
+    "evidence_events": 2,
+    "kill_switch": true
+  },
+  "external_mutations": 0,
+  "build_reuse": true,
+  "production_rollback": false
+}

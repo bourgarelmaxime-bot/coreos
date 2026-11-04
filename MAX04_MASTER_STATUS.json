@@ -1,0 +1,26 @@
+{
+  "schema": "COREOS_MAX04_MASTER_STATUS_V1",
+  "date": "2026-11-04",
+  "branch": "max04/release-closure",
+  "pr": 5,
+  "qualified_code_sha": "00473c5ffadd825cf8fd6e4647702079e5849f35",
+  "hosted_code_sha": "9b531dc145262f580cd34be190bc7aaac3dd67cc",
+  "hosted_vs_qualified_diff": [
+    ".github/workflows/ci.yml"
+  ],
+  "runtime_sha256": "4f7a726d914704debe1357017aa1a70c9826eb77a844d457b8dad7e8fe5bcbe4",
+  "pr_base": "max03/a-concurrency-hardening",
+  "status": "CONDITIONAL_PASS_RELEASE_BLOCKED",
+  "gates": {
+    "cancellation_race": "PASS_CI_AND_RAILWAY",
+    "kill_switch_mid_execution": "PASS_CI_AND_RAILWAY",
+    "db_outage_reconnection": "PASS_DISPOSABLE_CI",
+    "codeql_assembled_static_security": "PASS_ZERO_FINDINGS_ZERO_EXTRACTION_DIAGNOSTICS",
+    "hosted_rollback": "PASS_REUSED_IMAGES",
+    "exact_sha_30min_soak": "IN_PROGRESS",
+    "independent_human_or_separate_agent_audit": "NOT_PERFORMED",
+    "E14": "BLOCKED"
+  },
+  "production_activation": false,
+  "merge_authorized": false
+}
