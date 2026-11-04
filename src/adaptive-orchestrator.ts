@@ -1,3 +1,4 @@
+import {assessGlobalSyntheticPolicy} from './policy-qualification.ts';
 // CORE OS MAX-03: generic, sandbox-only adaptive orchestration.
 // No application adapter, network access, credentials or external mutations.
 export const ADAPTIVE_CONTRACT='COREOS_SYNTHETIC_ORCHESTRATION_V1';
@@ -144,11 +145,22 @@ const transitions:Record<PolicyStage,PolicyStage[]>={CANDIDATE:['OFFLINE_QUALIFI
  SHADOW_QUALIFIED:['ISOLATED_CANARY'],ISOLATED_CANARY:['QUALIFIED'],QUALIFIED:['ACTIVE'],ACTIVE:['RETIRED'],RETIRED:[]};
 export class GovernedPolicyRegistry {
  private policies=new Map<string,{policy:Policy,stage:PolicyStage,evidence_ids:string[],rollback_id:string|null}>();
+ private readonly offlineGates=new Map<string,ReturnType<typeof assessGlobalSyntheticPolicy>>();
  register(policy:Policy,rollback_id:string|null){if(this.policies.has(policy.id))throw new OrchestrationError('POLICY_ALREADY_REGISTERED');
   this.policies.set(policy.id,{policy:{...policy},stage:'CANDIDATE',evidence_ids:[],rollback_id});}
  get(id:string){const p=this.policies.get(id);return p?{...p,policy:{...p.policy},evidence_ids:[...p.evidence_ids]}:null;}
+ recordOfflineEvidence(id:string,report:any){
+  if(!this.policies.has(id))throw new OrchestrationError('POLICY_UNKNOWN');
+  const gate=assessGlobalSyntheticPolicy(report);
+  this.offlineGates.set(id,gate);return gate;
+ }
  promote(id:string,next:PolicyStage,evidence:string[],authority:'ISOLATED'|'PRODUCTION'='ISOLATED'){
   const current=this.policies.get(id);if(!current)throw new OrchestrationError('POLICY_UNKNOWN');
+  if(next==='ACTIVE'&&authority!=='PRODUCTION')throw new OrchestrationError('PRODUCTION_APPROVAL_REQUIRED');
+  if(next==='ACTIVE')throw new OrchestrationError('PRODUCTION_ACTIVATION_UNAVAILABLE');
+  if(next==='OFFLINE_QUALIFIED'&&!this.offlineGates.get(id)?.eligible_for_shadow_review)throw new OrchestrationError('POLICY_COMPARATIVE_GATE_FAILED');
+  if(next==='SHADOW_QUALIFIED')throw new OrchestrationError('SHADOW_EVIDENCE_REQUIRED');
+  if(next==='ISOLATED_CANARY'||next==='QUALIFIED')throw new OrchestrationError('ISOLATED_QUALIFICATION_EVIDENCE_REQUIRED');
   if(!transitions[current.stage].includes(next))throw new OrchestrationError('POLICY_TRANSITION_INVALID');
   if(!evidence.length||evidence.some(e=>!e))throw new OrchestrationError('POLICY_EVIDENCE_REQUIRED');
   if(next==='ACTIVE'&&authority!=='PRODUCTION')throw new OrchestrationError('PRODUCTION_APPROVAL_REQUIRED');
