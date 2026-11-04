@@ -23,9 +23,9 @@ export type ObservedMetrics = {
   provider_id: string;
   tenant_id: string;
   capability: string;
-  quality_source: 'INDEPENDENT_EVALUATION';
-  cost_source: 'ACTUAL_BILLED';
-  latency_source: 'VERIFIED_OBSERVATION';
+  quality_source: 'INDEPENDENT_EVALUATION' | 'SIMULATED_FIXTURE';
+  cost_source: 'ACTUAL_BILLED' | 'SIMULATED_FIXTURE';
+  latency_source: 'VERIFIED_OBSERVATION' | 'SIMULATED_FIXTURE';
   receipt_id: string;
   sample_count: number;
   quality_mean: number;
@@ -36,6 +36,7 @@ export type ObservedMetrics = {
 };
 
 export type ShadowRankingRequest = {
+  evidence_mode: 'VERIFIED_OBSERVATIONS' | 'SYNTHETIC_FIXTURE';
   tenant_id: string;
   capability: string;
   baseline_provider_id: string;
@@ -58,6 +59,7 @@ type Reason =
 export type ShadowRankingResult = {
   schema: typeof SHADOW_RANKING_SCHEMA;
   mode: 'SHADOW_ONLY';
+  evidence_mode: 'VERIFIED_OBSERVATIONS' | 'SYNTHETIC_FIXTURE';
   actionable: false;
   can_execute: false;
   can_promote: false;
@@ -88,6 +90,7 @@ function validate(req:ShadowRankingRequest){
   if(!req||typeof req.tenant_id!=='string'||!req.tenant_id||
      typeof req.capability!=='string'||!req.capability||
      typeof req.baseline_provider_id!=='string'||!req.baseline_provider_id||
+     !['VERIFIED_OBSERVATIONS','SYNTHETIC_FIXTURE'].includes(req.evidence_mode)||
      !safeList(req.authorized_scopes)||!Array.isArray(req.providers)||
      !Array.isArray(req.observed)||req.allow_external_mutation!==false||
      !finite(req.max_cost_usd)||!finite(req.max_latency_ms,1)||
@@ -114,9 +117,13 @@ function validate(req:ShadowRankingRequest){
     if(!e||typeof e.provider_id!=='string'||!e.provider_id||
        typeof e.tenant_id!=='string'||!e.tenant_id||
        typeof e.capability!=='string'||!e.capability||
-       e.quality_source!=='INDEPENDENT_EVALUATION'||
-       e.cost_source!=='ACTUAL_BILLED'||
-       e.latency_source!=='VERIFIED_OBSERVATION'||
+       (req.evidence_mode==='VERIFIED_OBSERVATIONS'?(
+         e.quality_source!=='INDEPENDENT_EVALUATION'||
+         e.cost_source!=='ACTUAL_BILLED'||
+         e.latency_source!=='VERIFIED_OBSERVATION'):(
+         e.quality_source!=='SIMULATED_FIXTURE'||
+         e.cost_source!=='SIMULATED_FIXTURE'||
+         e.latency_source!=='SIMULATED_FIXTURE'))||
        typeof e.receipt_id!=='string'||!e.receipt_id||
        !Number.isInteger(e.sample_count)||e.sample_count<0||
        !finite(e.quality_mean,0,1)||
@@ -158,7 +165,7 @@ export function shadowRankProviders(req:ShadowRankingRequest):ShadowRankingResul
     e.tenant_id===req.tenant_id&&e.capability===req.capability
   ).map(x=>[x.provider_id,x]));
   const result=(reason:Reason,id:string|null,qualified:string[]=[],frontier:string[]=[],chosen:ObservedMetrics|null=null):ShadowRankingResult=>({
-    schema:SHADOW_RANKING_SCHEMA,mode:'SHADOW_ONLY',actionable:false,
+    schema:SHADOW_RANKING_SCHEMA,mode:'SHADOW_ONLY',evidence_mode:req.evidence_mode,actionable:false,
     can_execute:false,can_promote:false,economic_value_verdict:'VALUE_UNPROVEN',
     recommended_provider_id:id,baseline_provider_id:baselineId,reason,
     eligible_provider_ids:eligibleIds,quality_qualified_ids:qualified,
