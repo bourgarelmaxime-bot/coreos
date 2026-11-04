@@ -96,6 +96,13 @@ async function main(){
  try{
   const started=await call('noop_execution','/v1/executions/'+execution.execution_id+'/start','POST',auth('a'),{},200);
   ok(started.status==='SUCCEEDED'&&started.result.external_mutations===0,'no_external_mutation');
+  const adaptiveBody={...req(['adaptive-reference'],1,'execute'),
+   constraints:{adaptive_workflow:{levels:[1,2],initial_level:1,deadline_s:5,
+     observations:[{backlog:20,observed_service_rate:1,oldest_age_s:0}]} }};
+  const adaptive=await call('create_adaptive_reference_execution','/v1/requests','POST',auth('a'),adaptiveBody,201);
+  const outcome=await call('adaptive_reference_execution','/v1/executions/'+adaptive.execution_id+'/start','POST',auth('a'),{},200);
+  ok(outcome.status==='SUCCEEDED'&&outcome.result.outcome==='BOUNDED_ADAPTIVE_REFERENCE_EXECUTION'&&
+    outcome.result.final_level===2&&outcome.result.transitions[0]?.decision==='SCALE_UP','adaptive_reference_scale_up');
  }finally{await call('switch_restored','/v1/control/kill-switch','POST',auth('a'),{engaged:true},200);}
  const receipt=await call('receipt','/v1/executions/'+execution.execution_id+'/receipt','GET',auth('a'));
  ok(receipt.evidence_count>0&&receipt.build==='COREOS_1_2_RC1','receipt_content');
