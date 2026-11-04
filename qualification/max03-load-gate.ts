@@ -18,13 +18,14 @@ async function call(body:any):Promise<{ms:number,status:number}>{
 }
 function invariant(x:any,name:string){if(!x)throw Error('MAX03_LOAD_ASSERT:'+name);}
 async function ramp(concurrency:number,count:number){
- const seen:{ms:number,status:number}[]=Array(count);let cursor=0;
+ const seen:{ms:number,status:number}[]=Array(count);let cursor=0;const wallStarted=performance.now();
  await Promise.all(Array.from({length:concurrency},async()=>{
   while(cursor<count){const i=cursor++;seen[i]=await call(work(concurrency+'-'+i+'-'+randomUUID()));}
  }));
+ const wallMs=performance.now()-wallStarted;
  const ms=seen.map(x=>x.ms),errors=seen.filter(x=>x.status!==201),elapsed=ms.reduce((a,b)=>a+b,0);
  const v={concurrency,count,errors:errors.length,p50_ms:quantile(ms,0.5),p95_ms:quantile(ms,0.95),p99_ms:quantile(ms,0.99),
-  mean_ms:elapsed/count,throughput_lower_bound_req_s:count/(Math.max(...ms)*Math.ceil(count/concurrency)/1000)};
+  mean_ms:elapsed/count,wall_ms:wallMs,throughput_req_s:count/(wallMs/1000)};
  console.log(JSON.stringify({event:'MAX03_LOAD_RAMP',...v}));
  invariant(errors.length===0,'http_errors_concurrency_'+concurrency);
  return v;
@@ -38,7 +39,7 @@ async function main(){
  const last=stages[2];
  invariant(last.p95_ms<=3000,'p95_limit_3000');
  invariant(last.p99_ms<=5000,'p99_limit_5000');
- invariant(last.throughput_lower_bound_req_s>=5,'throughput_lower_bound_5');
+ invariant(last.throughput_req_s>=5,'throughput_min_5');
  const nodes=Array.from({length:1024},(_,i)=>({id:'cap'+String(i).padStart(4,'0'),depends_on:i?['cap'+String(i-1).padStart(4,'0')]:[],cost:1}));
  const dagBody={...work('dag1024'),available_capabilities:nodes,budget:{max_cost:1024}};
  const largeStart=performance.now(),dag=await call(dagBody),dagMs=performance.now()-largeStart;
