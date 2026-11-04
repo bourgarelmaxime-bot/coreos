@@ -38,3 +38,7 @@ Rollback `a799d5…` → RC5 `378003…` → `a799d5…` PASS : déploiements `3
 Dans PR #3, migration 005, 10 résultats synthétiques persistent dans Postgres jetable. Tests d'isolation tenant, verrou append-only, lecture sans fuite de futur et promotion ACTIVE bloquée PASS. Le graphe planifié est réellement parcouru par les adaptateurs synthétiques. Pas d'exécution provider réel, pas de déploiement production, aucune preuve de gain causal généralisable.
 
 L'audit indépendant E14 et le résultat du soak 30min restent PENDING ; pas de merge/release.
+
+## Concurrence entre deux processus (04/11/2026)
+
+Le test `qualification/max03-concurrency-gate.ts` lance deux instances Bun indépendantes connectées au même PostgreSQL jetable. CI `https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41772019930` : 24 appels idempotents simultanés → 1 requête ; 12 démarrages simultanés → 1 succès, 11 conflits ; 1 événement `EXECUTION_STARTED`, 0 fourche d'audit. **PASS**. Ce test démontre des transactions inter-processus mais ne constitue pas une qualification d'orchestration distribuée multi-région ou de présence d'un vrai provider.

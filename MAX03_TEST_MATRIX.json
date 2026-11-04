@@ -1,5 +1,5 @@
 {
-  "source_sha": "a799d5b7fb7cac5f2cdf8d587990ddc3bfd5ce22",
+  "source_sha": "f9ddc28323d5dc215112164fd92deb0230982987",
   "tests": [
     {
       "id": "A-CON-01",
@@ -103,6 +103,21 @@
       "name": "durable 10-outcome PG registry, tenant isolation, as-of cutoff, append-only",
       "result": "PASS_ISOLATED",
       "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41770721174"
+    },
+    {
+      "id": "A-DIST-01",
+      "name": "Two Bun processes, common Postgres: 24 idempotent calls, 12 execution starts and audit chain",
+      "result": "PASS",
+      "evidence": "https://github.com/bourgarelmaxime-bot/coreos/actions/runs/41772019930",
+      "measurements": {
+        "server_processes": 2,
+        "idempotency_calls": 24,
+        "unique_requests": 1,
+        "start_attempts": 12,
+        "start_winners": 1,
+        "start_conflicts": 11,
+        "audit_forks": 0
+      }
     }
   ]
 }
