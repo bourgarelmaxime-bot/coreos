@@ -64,3 +64,5 @@ jobs:
         run: python3 scripts/build_release.py
       - name: Isolated HTTP security and restart
         run: bun run qualification/isolated-gate.ts
+      - name: MAX03 concurrency safety falsification
+        run: bun run qualification/max03-concurrency-gate.ts
