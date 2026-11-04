@@ -66,3 +66,5 @@ jobs:
         run: bun run qualification/isolated-gate.ts
       - name: MAX03 concurrency safety falsification
         run: bun run qualification/max03-concurrency-gate.ts
+      - name: MAX03 preregistered load and graph/payload limits
+        run: bun run qualification/max03-load-gate.ts
