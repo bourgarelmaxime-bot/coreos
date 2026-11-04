@@ -1,0 +1,9 @@
+{
+  "purpose": "one-shot 30 minute sustained Postgres17 CI qualification",
+  "expected_source_sha": "0bfb5e907688f0279d597ec6e7d525427bb96a2e",
+  "duration_seconds": 1800,
+  "branch": "max03/soak-run-20261104",
+  "data": "synthetic-only",
+  "external_mutations": false,
+  "hard_constraints": "MAX03_PERFORMANCE_ACCEPTANCE.json"
+}
